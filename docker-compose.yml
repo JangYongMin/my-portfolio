@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  web:
+    # 빌드 최적화: 개발용 노드 이미지를 직접 사용합니다.
+    image: node:20-alpine 
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    # 컨테이너 시작 시 실행할 명령어
+    command: sh -c "npm install && npm run dev"
