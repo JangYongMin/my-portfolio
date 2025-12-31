@@ -13,4 +13,4 @@ services:
       - /app/node_modules
       - /app/.next
     # 컨테이너 시작 시 실행할 명령어
-    command: sh -c "npm install && npx next dev"
+    command: sh -c "npm install && npm run dev"
