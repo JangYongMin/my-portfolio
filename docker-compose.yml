@@ -6,9 +6,11 @@ services:
     working_dir: /app
     ports:
       - "3000:3000"
+    environment:
+      - WATCHPACK_POLLING=true     # Next.js용 폴링 설정
     volumes:
       - .:/app
       - /app/node_modules
       - /app/.next
     # 컨테이너 시작 시 실행할 명령어
-    command: sh -c "npm install && npm run dev"
+    command: sh -c "npm install && npx next dev"

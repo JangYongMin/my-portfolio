@@ -1,65 +1,73 @@
 import Image from "next/image";
 
 export default function Home() {
+  const bgImageUrl = "https://firebasestorage.googleapis.com/v0/b/portfolio-83772.firebasestorage.app/o/bg_portfolio.jpg?alt=media&token=bc3edafa-d2c0-4328-9479-2acdb5e503b7";
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    // main에 contain-paint를 추가하여 자식 요소들이 영역 밖으로 번지는 것을 방지합니다.
+    <main className="h-screen overflow-y-auto snap-y snap-mandatory no-scrollbar scroll-smooth relative">
+      
+      {/* 1. 배경 이미지 (Hero Section에서만 보임) */}
+      <div className="fixed inset-0 -z-10">
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
+          src={bgImageUrl}
+          alt="Background"
+          fill
           priority
+          className="object-cover opacity-60"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+      </div>
+
+      {/* 2. HERO SECTION (수정포인트: bg-transparent) */}
+      <section id="home" 
+        className="h-screen w-full snap-start flex flex-col md:flex-row items-center justify-center px-10 md:px-20 bg-transparent">
+        <div className="flex-1 text-center md:text-left drop-shadow-2xl md:pl-32">
+          <h1 className="text-6xl md:text-[10rem] font-black tracking-tighter text-white leading-[0.85]">
+            CREATE <br />
+            MY <span className="text-blue-500">OWN</span> <br />
+            LIFE
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-8 text-lg md:text-xl text-white/90 font-medium max-w-lg">
+            나만의 가치를 만드는 개발자, 장용민입니다.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* 사이드 버튼 */}
+        <div className="flex flex-row md:flex-col gap-5 mt-12 md:mt-0 z-20">
+          <QuickMenuIcon href="#profile" emoji="👤" label="PROFILE" />
+          <QuickMenuIcon href="#stack" emoji="🛠️" label="STACK" />
+          <QuickMenuIcon href="#projects" emoji="🚀" label="PROJECTS" />
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* 3. PROFILE SECTION (중요: bg-white로 배경을 꽉 채워 이전 잔상을 가립니다) */}
+      <section id="profile" className="relative h-screen w-full snap-start flex items-center justify-center bg-white z-10">
+        <h2 className="text-5xl font-bold text-black font-sans">PROFILE</h2>
+      </section>
+
+      {/* 4. STACK SECTION */}
+      <section id="stack" className="relative h-screen w-full snap-start flex items-center justify-center bg-zinc-100 z-10">
+        <h2 className="text-5xl font-bold text-black font-sans">TECH STACK</h2>
+      </section>
+
+      {/* 5. PROJECTS SECTION */}
+      <section id="projects" className="relative h-screen w-full snap-start flex items-center justify-center bg-white z-10">
+        <h2 className="text-5xl font-bold text-black font-sans">PROJECTS</h2>
+      </section>
+
+    </main>
+  );
+}
+
+// 아이콘 컴포넌트 (동일)
+function QuickMenuIcon({ href, emoji, label }: { href: string; emoji: string; label: string }) {
+  return (
+    <a 
+      href={href} 
+      className="group flex flex-col items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-xl rounded-3xl border border-white/30 hover:bg-white/40 transition-all duration-300 shadow-2xl"
+    >
+      <span className="text-3xl group-hover:scale-110 transition-transform">{emoji}</span>
+      <span className="text-[10px] mt-2 font-black text-white group-hover:text-blue-300 tracking-widest">{label}</span>
+    </a>
   );
 }

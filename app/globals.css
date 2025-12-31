@@ -5,6 +5,22 @@
   --foreground: #171717;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+@layer utilities {
+  /* 스크롤바 숨기기 (Chrome, Safari, Edge) */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* 스크롤바 숨기기 (Firefox) */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
