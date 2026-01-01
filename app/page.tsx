@@ -54,7 +54,7 @@ export default function Home() {
                 src="/icons/github-mark.png" // 또는 파이어베이스 URL
               />
               <SocialIcon 
-                href="https://discord.com/users/your-id" 
+                href="https://discord.gg/SPamqcaV4d" 
                 icon="discord" 
                 src="/icons/Discord-Symbol-Black.png" 
               />

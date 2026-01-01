@@ -1,8 +1,7 @@
 version: '3.8'
 services:
   web:
-    # 빌드 최적화: 개발용 노드 이미지를 직접 사용합니다.
-    image: node:20-alpine 
+    image: node:18-alpine 
     working_dir: /app
     ports:
       - "3000:3000"
