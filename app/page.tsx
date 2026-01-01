@@ -43,31 +43,56 @@ export default function Home() {
       {/* 3. PROFILE SECTION (중요: bg-white로 배경을 꽉 채워 이전 잔상을 가립니다) */}
       <section id="profile" className="relative h-screen w-full snap-start flex items-center justify-center bg-zinc-300 z-10">
         <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
-    
-        {/* 왼쪽: 정사각형 사진 영역 */}
-        <div className="relative w-64 md:w-96 aspect-square bg-zinc-200 rounded-[40px] shadow-xl overflow-hidden">
-          <Image 
-            src="https://firebasestorage.googleapis.com/v0/b/portfolio-83772.firebasestorage.app/o/profile.jpg?alt=media&token=401a5e0d-4ad0-443e-b822-cca6b9bf85b8" 
-            alt="Jang Yongmin" 
-            fill
-            className="object-cover"
-          /> 
-        </div>
-
-        {/* 오른쪽: 인적 사항 정보 */}
-        <div className="flex flex-col gap-6 text-left">
-          <h2 className="text-4xl md:text-5xl font-black text-black mb-4 tracking-tight">PROFILE</h2>
           
-          <div className="space-y-4 text-lg md:text-xl font-medium text-zinc-800">
-            <ProfileItem label="이름" value="장용민" />
-            <ProfileItem label="생년월일" value="01.08.02" />
-            <ProfileItem label="위치" value="서울특별시 영등포구" />
-            <ProfileItem label="연락처" value="010-3234-3971" />
-            <ProfileItem label="이메일" value="yongmin0182@gmail.com" />
-            <ProfileItem label="학력" value="중원대학교 컴퓨터공학 학사" />
+          {/* 사진과 소셜 아이콘 그룹을 감싸는 컨테이너 */}
+          <div className="flex items-center gap-6">
+            {/* 소셜 아이콘 세로 배치 (사진의 왼쪽) */}
+            <div className="flex flex-col gap-4">
+              <SocialIcon 
+                href="https://github.com/JangYongMin" 
+                icon="github" 
+                src="/icons/github-mark.png" // 또는 파이어베이스 URL
+              />
+              <SocialIcon 
+                href="https://discord.com/users/your-id" 
+                icon="discord" 
+                src="/icons/Discord-Symbol-Black.png" 
+              />
+              <SocialIcon 
+                href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2/" 
+                icon="linkedin" 
+                src="/icons/InBug-Black.png" 
+              />
+            </div>
+
+            {/* 왼쪽: 정사각형 사진 영역 */}
+            <div className="relative w-64 md:w-96 aspect-square bg-zinc-200 rounded-[40px] shadow-xl overflow-hidden">
+              <Image 
+                src="https://firebasestorage.googleapis.com/v0/b/portfolio-83772.firebasestorage.app/o/profile.jpg?alt=media&token=401a5e0d-4ad0-443e-b822-cca6b9bf85b8" 
+                alt="Jang Yongmin" 
+                fill
+                sizes="(max-width: 768px) 256px, 384px"
+                className="object-cover"
+                priority
+              />
+            </div>
+          </div>
+
+          {/* 오른쪽: 인적 사항 정보 */}
+          <div className="flex flex-col gap-6 text-left">
+            <h2 className="text-4xl md:text-5xl font-black text-black mb-4 tracking-tight">PROFILE</h2>
+            
+            <div className="space-y-4 text-lg md:text-xl font-medium text-zinc-800">
+              <ProfileItem label="이름" value="장용민" />
+              <ProfileItem label="생년월일" value="01.08.02" />
+              <ProfileItem label="위치" value="서울특별시 영등포구" />
+              <ProfileItem label="연락처" value="010-3234-3971" />
+              <ProfileItem label="이메일" value="yongmin0182@gmail.com" />
+              <ProfileItem label="학력" value="중원대학교 컴퓨터공학 학사" />
+            </div>
           </div>
         </div>
-      </div>
+      
       </section>
 
       {/* 4. STACK SECTION */}
@@ -109,6 +134,43 @@ function ProfileItem({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
+
+function SocialIcon({ href, icon, src }: { href: string; icon: string; src: string }) {
+  return (
+    <a 
+      href={href} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="w-12 h-12 flex items-center justify-center rounded-xl bg-zinc-100 border border-zinc-200 hover:bg-blue-500 hover:scale-110 transition-all duration-300 overflow-hidden p-2.5 group"
+    >
+      <div className="relative w-full h-full">
+        <Image 
+          src={src} 
+          alt={icon} 
+          fill
+          className="object-contain transition-all duration-300 group-hover:brightness-0 group-hover:invert" 
+          // 호버 시 아이콘 색상을 흰색으로 반전시키는 팁입니다.
+        />
+      </div>
+    </a>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
