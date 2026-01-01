@@ -35,7 +35,7 @@ export default function Home() {
         {/* 사이드 버튼 */}
         <div className="flex flex-row md:flex-col gap-5 mt-12 md:mt-0 z-20">
           <QuickMenuIcon href="#profile" emoji="👤" label="PROFILE" />
-          <QuickMenuIcon href="#stack" emoji="🛠️" label="STACK" />
+          <QuickMenuIcon href="#skills" emoji="🛠️" label="SKILLS" />
           <QuickMenuIcon href="#projects" emoji="📁" label="PROJECTS" />
         </div>
       </section>
@@ -95,9 +95,9 @@ export default function Home() {
       
       </section>
 
-      {/* 4. STACK SECTION */}
-      <section id="stack" className="relative h-screen w-full snap-start flex items-center justify-center bg-zinc-200 z-10">
-        <h2 className="text-5xl font-bold text-black font-sans">TECH STACK</h2>
+      {/* 4. SKILLS SECTION */}
+      <section id="skills" className="relative h-screen w-full snap-start flex items-center justify-center bg-zinc-200 z-10">
+        <h2 className="text-5xl font-bold text-black font-sans">SKILLS</h2>
       </section>
 
       {/* 5. PROJECTS SECTION */}
@@ -149,7 +149,7 @@ function SocialIcon({ href, icon, src }: { href: string; icon: string; src: stri
           alt={icon} 
           fill
           className="object-contain transition-all duration-300 group-hover:brightness-0 group-hover:invert" 
-          // 호버 시 아이콘 색상을 흰색으로 반전시키는 팁입니다.
+          // 호버 시 아이콘 색상을 흰색으로 반전
         />
       </div>
     </a>
