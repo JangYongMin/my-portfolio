@@ -1,7 +1,29 @@
+'use client';
+import {useState} from "react";
 import Image from "next/image";
 
 export default function Home() {
   const bgImageUrl = "https://firebasestorage.googleapis.com/v0/b/portfolio-83772.firebasestorage.app/o/bg_portfolio.jpg?alt=media&token=bc3edafa-d2c0-4328-9479-2acdb5e503b7";
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  // 카테고리별 상세 경험 데이터
+  const skillDetails: { [key: string]: string[] } = {
+    "LANGUAGES": [
+      "Java: ",
+      "JavaScript: ",
+      "Python: "
+    ],
+    "FRAMEWORKS": [
+      "Spring Boot: ",
+      "Next.js: ",
+      "MyBatis: "
+    ],
+    "DB & TOOLS": [
+      "Oracle: ",
+      "Docker: ",
+      "GitHub: "
+    ]
+  };
 
   return (
     // main에 contain-paint를 추가하여 자식 요소들이 영역 밖으로 번지는 것을 방지합니다.
@@ -51,7 +73,7 @@ export default function Home() {
               <SocialIcon 
                 href="https://github.com/JangYongMin" 
                 icon="github" 
-                src="/icons/github-mark.png" // 또는 파이어베이스 URL
+                src="/icons/github-mark.png"
               />
               <SocialIcon 
                 href="https://discord.gg/SPamqcaV4d" 
@@ -97,7 +119,50 @@ export default function Home() {
 
       {/* 4. SKILLS SECTION */}
       <section id="skills" className="relative h-screen w-full snap-start flex items-center justify-center bg-zinc-200 z-10">
-        <h2 className="text-5xl font-bold text-black font-sans">SKILLS</h2>
+        <div className="max-w-6xl w-full flex flex-col items-center">
+            
+            {/* 중앙 정렬된 섹션 타이틀 */}
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-black text-black mb-4 tracking-tight">
+                SKILLS
+              </h2>
+            </div>
+
+            {/* 스킬 그리드 레이아웃 (중앙 정렬 유지) */}
+            {/* ... 타이틀 ... */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 cursor-pointer">
+              <div onClick={() => setSelectedCategory("LANGUAGES")}>
+                <SkillCategory title="LANGUAGES">
+                  <SkillItem name="Java" src="/icons/java-logo.png" />
+                  <SkillItem name="JavaScript" src="/icons/javaScript-logo.png" />
+                  <SkillItem name="Python" src="/icons/python-logo-only.png" />
+                </SkillCategory>
+              </div>
+              <div onClick={() => setSelectedCategory("FRAMEWORKS")}>
+                <SkillCategory title="FRAMEWORKS">
+                  <SkillItem name="Spring Boot" src="/icons/spring-boot.png" />
+                  <SkillItem name="Next.js" src="/icons/nextjs-logo.png" />
+                  <SkillItem name="MyBatis" src="/icons/logo-bird-ninja.png" />
+                </SkillCategory>
+              </div>
+              <div onClick={() => setSelectedCategory("DB & TOOLS")}>
+                <SkillCategory title="DB & TOOLS">
+                  <SkillItem name="Oracle" src="/icons/oracleDB-logo.png" />
+                  <SkillItem name="Docker" src="/icons/docker-mark-blue.png" />
+                  <SkillItem name="GitHub" src="/icons/github-mark.png" />
+                </SkillCategory>
+              </div>
+            </div>
+          </div>
+        
+
+
+
+
+
+
+
+        
       </section>
 
       {/* 5. PROJECTS SECTION */}
@@ -109,6 +174,42 @@ export default function Home() {
         <Footer />
       </section>
       <TopButton />
+
+      {/* 모달 창 컴포넌트 */}
+      {selectedCategory && (
+  <div 
+    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-[2px] p-4"
+    onClick={() => setSelectedCategory(null)}
+  >
+    <div 
+      className="bg-white w-full max-w-xl rounded-[40px] border-[2px] border-zinc-200 p-10"
+      // shadow 클래스를 완전히 제거하여 평면적인 느낌을 주었습니다.
+      // border-black 대신 border-zinc-200을 써서 조금 더 부드러운 느낌을 냈습니다.
+      onClick={(e) => e.stopPropagation()} 
+    >
+      <div className="flex justify-between items-center mb-8">
+        <h3 className="text-2xl font-bold text-black tracking-tight">
+          {selectedCategory}
+        </h3>
+        <button 
+          onClick={() => setSelectedCategory(null)}
+          className="text-zinc-400 hover:text-black transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      
+      <ul className="space-y-5">
+        {skillDetails[selectedCategory].map((desc, i) => (
+          <li key={i} className="text-lg font-medium text-zinc-600 leading-relaxed">
+            {desc}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+)}
+
     </main>
   );
 }
@@ -156,7 +257,38 @@ function SocialIcon({ href, icon, src }: { href: string; icon: string; src: stri
   );
 }
 
+function SkillCategory({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    // 'group' 클래스를 추가하여 자식들이 부모의 호버 상태를 알 수 있게 합니다.
+    <div className="
+      group bg-white p-8 rounded-[40px] border-[2px] border-zinc-100 
+      transition-all duration-300 ease-out
+      hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] 
+      hover:border-blue-500/30
+    ">
+      <h3 className="text-2xl font-black text-blue-500 mb-6 tracking-tight border-b-2 border-zinc-50 pb-2">
+        {title}
+      </h3>
+      <div className="grid grid-cols-2 gap-4">
+        {children}
+      </div>
+    </div>
+  );
+}
 
+function SkillItem({ name, src }: { name: string; src: string }) {
+  return (
+    <div className="flex flex-col items-center gap-2 p-2">
+      {/* group-hover:grayscale-0 를 통해 카테고리 전체 호버 시 컬러로 변경됩니다. */}
+      <div className="relative w-12 h-12 grayscale group-hover:grayscale-0 transition-all duration-500">
+        <Image src={src} alt={name} fill className="object-contain" />
+      </div>
+      <span className="text-xs font-bold text-zinc-400 group-hover:text-black transition-colors duration-500">
+        {name}
+      </span>
+    </div>
+  );
+}
 
 
 
