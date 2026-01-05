@@ -7,21 +7,75 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   // 카테고리별 상세 경험 데이터
-  const skillDetails: { [key: string]: string[] } = {
+  const skillDetails: { [key: string]: { subtitle: string; contents: string[] }[] } = {
     "LANGUAGES": [
-      "Java: ",
-      "JavaScript: ",
-      "Python: "
+      {
+        subtitle: "Java",
+        contents: [
+          "Bcrypt 해시 함수를 이용한 암호화 데이터 저장 및 로그인 검증 로직 구현",
+          "TextWebSocketHandler를 상속받은 웹소켓 핸들러로 실시간 1:1 채팅 서버 구축",
+          "Builder 패턴을 활용한 도메인 객체(Employee, MessageVO 등) 설계 및 관리"
+        ]
+      },
+      {
+        subtitle: "JavaScript",
+        contents: [
+          "Node.js 환경에서 주식 관련 뉴스 데이터를 실시간으로 수집하고 처리하는 시스템 구축",
+          "jQuery Ajax를 활용하여 페이지 새로고침 없는 동적 검색 및 페이징 구현",
+          "웹소켓 클라이언트를 통해 수신된 JSON 데이터를 브라우저에 실시간 말풍선 렌더링",
+          "문서 작성 시 다중 항목 동적 추가/삭제 및 데이터 유효성 검사 로직 개발"
+        ]
+      },
+      {
+        subtitle: "Python",
+        contents: [
+          "Discord API와 Google Gemini AI를 연동하여 실시간 대화형 봇 서비스 구현",
+          "AI 모델의 프롬프트 엔지니어링을 통해 봇의 응답 정확도 및 사용자 경험 최적화",
+        ]
+      },
     ],
     "FRAMEWORKS": [
-      "Spring Boot: ",
-      "Next.js: ",
-      "MyBatis: "
+      {
+        subtitle: "Spring Boot",
+        contents: [
+          "@PostMapping, @ResponseBody 등을 활용한 RESTful 데이터 통신 컨트롤러 설계",
+          "Service-Dao 계층 분리 및 @Transactional을 통한 데이터 무결성 보장",
+        ]
+      },
+      {
+        subtitle: "Next.js",
+        contents: [
+          "Next.js 15 App Router를 활용하여 서버 중심의 효율적인 페이지 구조 설계 및 최적화",
+          "Docker 컨테이너 환경에서 Polling 방식을 적용하여 개발 효율을 극대화한 Hot Reload 시스템 구축",
+          "Tailwind CSS를 활용하여 일관된 디자인 시스템 구축 및 사용자 경험을 고려한 반응형 UI 구현",
+          "사용자 인터랙션을 위한 Client Component와 성능 최적화를 위한 Server Component의 적절한 분리 및 활용"
+        ]
+      },
+      {
+        subtitle: "MyBatis",
+        contents: [
+          "RowBounds를 이용한 효율적인 서버 사이드 페이징 및 검색 동적 쿼리 최적화",
+          "foreach 태그를 사용하여 대량의 발주 항목을 하나의 쿼리로 일괄 INSERT 처리",
+          "상황별 동적 SQL(<choose>, <when>)을 활용한 다중 조건 검색 매퍼 작성"
+        ]
+      }
     ],
     "DB & TOOLS": [
-      "Oracle: ",
-      "Docker: ",
-      "GitHub: "
+      {
+        subtitle: "Oracle",
+        contents: [
+          "ERP 및 도서관 시스템 구축을 위한 ERD 설계 및 테이블 간 관계 설정(FK/PK)",
+          "Sequence와 JOIN을 활용한 도서 대출 현황 및 인기 도서 Top 5 조회 쿼리 개발",
+          "메신저 기록 및 근태 데이터를 위한 대용량 텍스트(VARCHAR2 4000) 테이블 설계"
+        ]
+      },
+      {
+        subtitle: "Docker & GitHub",
+        contents: [
+          "Docker 컨테이너 환경을 활용한 개발 환경 표준화 및 배포 관리",
+          "Git Flow 전략 기반의 팀 프로젝트 수행 및 소스 코드 버전 관리"
+        ]
+      }
     ]
   };
 
@@ -88,7 +142,7 @@ export default function Home() {
             </div>
 
             {/* 왼쪽: 정사각형 사진 영역 */}
-            <div className="relative w-64 md:w-96 aspect-square bg-zinc-200 rounded-[40px] shadow-xl overflow-hidden">
+            <div className="relative w-64 md:w-96 aspect-square bg-zinc-200 rounded-[5px] shadow-xl overflow-hidden">
               <Image 
                 src="https://firebasestorage.googleapis.com/v0/b/portfolio-83772.firebasestorage.app/o/profile.jpg?alt=media&token=401a5e0d-4ad0-443e-b822-cca6b9bf85b8" 
                 alt="Jang Yongmin" 
@@ -177,38 +231,53 @@ export default function Home() {
 
       {/* 모달 창 컴포넌트 */}
       {selectedCategory && (
-  <div 
-    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-[2px] p-4"
-    onClick={() => setSelectedCategory(null)}
-  >
-    <div 
-      className="bg-white w-full max-w-xl rounded-[40px] border-[2px] border-zinc-200 p-10"
-      // shadow 클래스를 완전히 제거하여 평면적인 느낌을 주었습니다.
-      // border-black 대신 border-zinc-200을 써서 조금 더 부드러운 느낌을 냈습니다.
-      onClick={(e) => e.stopPropagation()} 
-    >
-      <div className="flex justify-between items-center mb-8">
-        <h3 className="text-2xl font-bold text-black tracking-tight">
-          {selectedCategory}
-        </h3>
-        <button 
-          onClick={() => setSelectedCategory(null)}
-          className="text-zinc-400 hover:text-black transition-colors"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-        </button>
-      </div>
-      
-      <ul className="space-y-5">
-        {skillDetails[selectedCategory].map((desc, i) => (
-          <li key={i} className="text-lg font-medium text-zinc-600 leading-relaxed">
-            {desc}
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
-)}
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-[2px] p-4"
+          onClick={() => setSelectedCategory(null)}>
+          <div 
+            /* w-fit과 max-w-7xl을 사용하되, 모바일에서는 전체 너비를 사용하도록 설정 */
+            className="bg-white w-fit max-w-[95%] md:max-w-[85%] rounded-[5px] border-[2px] border-zinc-200 p-8 md:p-16 shadow-sm max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()} >
+            <div className="flex justify-between items-center mb-10 md:mb-16 gap-10">
+              <h3 className="text-2xl md:text-3xl font-black text-black tracking-tighter uppercase whitespace-normal md:whitespace-nowrap">
+                {selectedCategory} EXPERIENCE
+              </h3>
+              <button 
+                onClick={() => setSelectedCategory(null)}
+                className="text-zinc-400 hover:text-black transition-colors shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+            
+            {/* --- 문단 가로 배치 구역 --- */}
+            {/* 1. 문단 개수에 따라 그리드 열을 자동으로 조절 (1개면 1열, 3개면 3열)
+                2. break-words를 통해 텍스트가 너비를 넘어가지 않게 방지*/}
+            <div className={`grid grid-cols-1 ${
+              skillDetails[selectedCategory].length === 3 ? 'md:grid-cols-3' : 
+              skillDetails[selectedCategory].length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-1'
+            } gap-x-12 gap-y-10`}>
+              {skillDetails[selectedCategory].map((group, i) => (
+                <div key={i} className="flex flex-col min-w-0"> {/* min-w-0은 그리드 안에서 텍스트 넘침 방지 필수 */}
+                  <h4 className="text-xl md:text-2xl font-black text-black mb-6 flex items-center gap-3">
+                    <span className="w-1.5 h-7 bg-blue-500 rounded-full shrink-0"></span>
+                    {group.subtitle}
+                  </h4>
+                  
+                  <ul className="space-y-5">
+                    {group.contents.map((desc, j) => (
+                      <li key={j} className="text-[15px] md:text-[17px] font-medium text-zinc-600 leading-relaxed flex items-start gap-3">
+                        <span className="text-blue-500 mt-2.5 text-[10px] shrink-0">●</span>
+                        {/* 단어 단위 줄바꿈을 강제하여 박스를 벗어나지 않게 함 */}
+                        <span className="break-words overflow-wrap-anywhere">{desc}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
     </main>
   );
@@ -219,8 +288,8 @@ function QuickMenuIcon({ href, emoji, label }: { href: string; emoji: string; la
   return (
     <a 
       href={href} 
-      className="group flex flex-col items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-xl rounded-3xl border border-white/30 hover:bg-white/40 transition-all duration-300 shadow-2xl"
-    >
+      className="group flex flex-col items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-xl rounded-[5px] 
+      border border-white/30 hover:bg-white/40 transition-all duration-300 shadow-2xl">
       <span className="text-3xl group-hover:scale-110 transition-transform">{emoji}</span>
       <span className="text-[10px] mt-2 font-black text-white group-hover:text-blue-300 tracking-widest">{label}</span>
     </a>
@@ -261,7 +330,7 @@ function SkillCategory({ title, children }: { title: string; children: React.Rea
   return (
     // 'group' 클래스를 추가하여 자식들이 부모의 호버 상태를 알 수 있게 합니다.
     <div className="
-      group bg-white p-8 rounded-[40px] border-[2px] border-zinc-100 
+      group bg-white p-8 rounded-[5px] border-[2px] border-zinc-100 
       transition-all duration-300 ease-out
       hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] 
       hover:border-blue-500/30
