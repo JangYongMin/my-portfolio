@@ -20,43 +20,70 @@ export default function Home() {
 
   const skillDetails: { [key: string]: { subtitle: string; contents: string[] }[] } = {
     "LANGUAGES": [
-      { subtitle: "Java", contents: [
-        "Bcrypt 해시 함수를 이용한 암호화 데이터 저장 및 로그인 검증 로직 구현", 
-        "TextWebSocketHandler를 상속받은 웹소켓 핸들러로 실시간 1:1 채팅 서버 구축", 
-        "Builder 패턴을 활용한 도메인 객체(Employee, MessageVO 등) 설계 및 관리"] },
-      { subtitle: "JavaScript", contents: [
-        "Node.js 환경에서 주식 관련 뉴스 데이터를 실시간으로 수집하고 처리하는 시스템 구축", 
-        "jQuery Ajax를 활용하여 페이지 새로고침 없는 동적 검색 및 페이징 구현", 
-        "웹소켓 클라이언트를 통해 수신된 JSON 데이터를 브라우저에 실시간 말풍선 렌더링", 
-        "문서 작성 시 다중 항목 동적 추가/삭제 및 데이터 유효성 검사 로직 개발"] },
-      { subtitle: "Python", contents: [
-        "Discord API와 Google Gemini AI를 연동하여 실시간 대화형 봇 서비스 구현", 
-        "AI 모델의 프롬프트 엔지니어링을 통해 봇의 응답 정확도 및 사용자 경험 최적화"] },
+      { 
+        subtitle: "Java", contents: [
+          "Bcrypt 해시 함수를 이용한 암호화 데이터 저장 및 로그인 검증 로직 구현", 
+          "TextWebSocketHandler를 상속받은 웹소켓 핸들러로 실시간 1:1 채팅 서버 구축", 
+          "Builder 패턴을 활용한 도메인 객체(Employee, MessageVO 등) 설계 및 관리"
+        ] 
+      },
+      { 
+        subtitle: "JavaScript", contents: [
+          "Node.js 환경에서 주식 관련 뉴스 데이터를 실시간으로 수집하고 처리하는 시스템 구축", 
+          "jQuery Ajax를 활용하여 페이지 새로고침 없는 동적 검색 및 페이징 구현", 
+          "웹소켓 클라이언트를 통해 수신된 JSON 데이터를 브라우저에 실시간 말풍선 렌더링", 
+          "문서 작성 시 다중 항목 동적 추가/삭제 및 데이터 유효성 검사 로직 개발"
+        ] 
+      },
+      { 
+        subtitle: "Python", contents: [
+          "Discord API와 Google Gemini AI를 연동하여 실시간 대화형 봇 서비스 구현", 
+          "AI 모델의 프롬프트 엔지니어링을 통해 봇의 응답 정확도 및 사용자 경험 최적화"
+        ] 
+      },
     ],
 
     "FRAMEWORKS": [
-      { subtitle: "Spring Boot", contents: [
-        "@PostMapping, @ResponseBody 등을 활용한 RESTful 데이터 통신 컨트롤러 설계", 
-        "Service-Dao 계층 분리 및 @Transactional을 통한 데이터 무결성 보장"] },
-      { subtitle: "Next.js", contents: [
-        "Next.js 15 App Router를 활용하여 서버 중심의 효율적인 페이지 구조 설계 및 최적화", 
-        "Docker 컨테이너 환경에서 Polling 방식을 적용하여 개발 효율을 극대화한 Hot Reload 시스템 구축", 
-        "Tailwind CSS를 활용하여 일관된 디자인 시스템 구축 및 사용자 경험을 고려한 반응형 UI 구현", 
-        "사용자 인터랙션을 위한 Client Component와 성능 최적화를 위한 Server Component의 적절한 분리 및 활용"] },
-      { subtitle: "MyBatis", contents: [
-        "RowBounds를 이용한 효율적인 서버 사이드 페이징 및 검색 동적 쿼리 최적화", 
-        "foreach 태그를 사용하여 대량의 발주 항목을 하나의 쿼리로 일괄 INSERT 처리", 
-        "상황별 동적 SQL(<choose>, <when>)을 활용한 다중 조건 검색 매퍼 작성"] }
+      { 
+        subtitle: "Spring Boot", contents: [
+          "@PostMapping, @ResponseBody 등을 활용한 RESTful 데이터 통신 컨트롤러 설계", 
+          "Service-Dao 계층 분리 및 @Transactional을 통한 데이터 무결성 보장"
+        ] 
+      },
+
+      { 
+        subtitle: "Next.js", contents: [
+          "Next.js 15 App Router를 활용하여 서버 중심의 효율적인 페이지 구조 설계 및 최적화", 
+          "Docker 컨테이너 환경에서 Polling 방식을 적용하여 개발 효율을 극대화한 Hot Reload 시스템 구축", 
+          "Tailwind CSS를 활용하여 일관된 디자인 시스템 구축 및 사용자 경험을 고려한 반응형 UI 구현", 
+          "사용자 인터랙션을 위한 Client Component와 성능 최적화를 위한 Server Component의 적절한 분리 및 활용"
+        ] 
+      },
+
+      { 
+        subtitle: "MyBatis", contents: [
+          "RowBounds를 이용한 효율적인 서버 사이드 페이징 및 검색 동적 쿼리 최적화", 
+          "foreach 태그를 사용하여 대량의 발주 항목을 하나의 쿼리로 일괄 INSERT 처리", 
+          "상황별 동적 SQL(<choose>, <when>)을 활용한 다중 조건 검색 매퍼 작성"
+        ] 
+      }
     ],
 
     "DB & TOOLS": [
-      { subtitle: "Oracle", contents: [
-        "ERP 및 도서관 시스템 구축을 위한 ERD 설계 및 테이블 간 관계 설정(FK/PK)",
-         "Sequence와 JOIN을 활용한 도서 대출 현황 및 인기 도서 Top 5 조회 쿼리 개발", 
-         "메신저 기록 및 근태 데이터를 위한 대용량 텍스트(VARCHAR2 4000) 테이블 설계"] },
-      { subtitle: "Docker & GitHub", contents: [
-        "Docker 컨테이너 환경을 활용한 개발 환경 표준화 및 배포 관리",
-         "Git Flow 전략 기반의 팀 프로젝트 수행 및 소스 코드 버전 관리"] }
+      { 
+        subtitle: "Oracle", contents: [
+          "ERP 및 도서관 시스템 구축을 위한 ERD 설계 및 테이블 간 관계 설정(FK/PK)",
+          "Sequence와 JOIN을 활용한 도서 대출 현황 및 인기 도서 Top 5 조회 쿼리 개발", 
+          "메신저 기록 및 근태 데이터를 위한 대용량 텍스트(VARCHAR2 4000) 테이블 설계"
+        ] 
+      },
+
+      { 
+        subtitle: "Docker & GitHub", contents: [
+          "Docker 컨테이너 환경을 활용한 개발 환경 표준화 및 배포 관리",
+          "Git Flow 전략 기반의 팀 프로젝트 수행 및 소스 코드 버전 관리"
+        ] 
+      }
     ]
   };
 
@@ -161,7 +188,7 @@ export default function Home() {
 
 
       {/* 2. PROFILE SECTION */}
-      <section id="profile" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-zinc-300 z-10 overflow-hidden">
+      <section id="profile" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-zinc-100 z-10 overflow-hidden">
         <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
           <div className="flex items-center gap-6">
             <div className="flex flex-col gap-4 shrink-0">
@@ -195,9 +222,11 @@ export default function Home() {
       bg-zinc-200 z-10 overflow-hidden">
         <div className="max-w-6xl w-full flex flex-col items-center">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-black mb-4 tracking-tight uppercase">Skills</h2>
+            <h2 className="text-5xl md:text-7xl font-black text-black mb-4 tracking-tighter uppercase">
+              Skills
+            </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 cursor-pointer px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-14 lg:gap-18 cursor-pointer w-full">
             <div onClick={() => setSelectedCategory("LANGUAGES")}>
               <SkillCategory title="LANGUAGES">
               <SkillItem name="Java" src="/icons/java-logo.png" />
@@ -226,13 +255,15 @@ export default function Home() {
 
 
       {/* 4. PROJECTS + FOOTER 통합 섹션 (자유스크롤)*/}
-      <section className="h-screen w-full snap-start snap-always overflow-y-auto no-scrollbar bg-white z-20 overflow-hidden">
+      <section id="project-container" className="h-screen w-full snap-start snap-always overflow-y-auto no-scrollbar bg-white z-20 overflow-hidden">
         <div className="flex flex-col min-h-full">
           <div id="projects" className="min-h-screen w-full flex flex-col items-center px-10 py-32 shrink-0">
             <div className="max-w-6xl w-full flex flex-col items-center">
 
               <div className="text-center mb-16">
-                <h2 className="text-5xl md:text-7xl font-black text-black tracking-tighter uppercase">Projects</h2>
+                <h2 className="text-5xl md:text-7xl font-black text-black tracking-tighter uppercase">
+                  Projects
+                </h2>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full mb-20">
@@ -253,7 +284,7 @@ export default function Home() {
                         <span key={skill} className="px-3 py-1 bg-zinc-100 text-zinc-500 text-xs font-bold rounded-full">
                           {skill}
                         </span>
-                        ))}
+                      ))}
                     </div>
 
                   </div>
@@ -465,7 +496,7 @@ function SkillCategory({ title, children }: { title: string; children: React.Rea
   return (
     <div className="group bg-white p-6 lg:p-8 rounded-[5px] border-[2px] border-zinc-100 transition-all duration-300 ease-out 
     hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:border-blue-500/30">
-      <h3 className="text-xl lg:text-2xl font-black text-blue-500 mb-6 tracking-tighter border-b-2 border-zinc-50 pb-2 uppercase">
+      <h3 className="text-xl lg:text-2xl font-black text-blue-500 mb-6 tracking-tighter border-b-2 border-zinc-50 pb-2 uppercase text-center">
         {title}
       </h3>
       <div className="grid grid-cols-2 gap-4">
@@ -520,10 +551,32 @@ function Footer() {
 
 
 function TopButton() {
+  const scrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    
+    // 1. 전체 페이지 부모 스크롤 최상단 이동
+    const mainContent = document.querySelector('main');
+    if (mainContent) {
+      mainContent.scrollTo({ 
+        top: 0, 
+        behavior: 'smooth' 
+      });
+    }
+
+    // 2. 프로젝트 묶음 섹션 내부 스크롤 최상단 초기화
+    const projectContainer = document.getElementById('project-container');
+    if (projectContainer) {
+      projectContainer.scrollTo({ 
+        top: 0 
+      }); // 내부 위치 리셋
+    }
+  };
+
   return (
-    <a href="#home" 
-    className="fixed bottom-10 right-10 z-50 flex flex-col items-center justify-center w-14 h-14 bg-white/90 backdrop-blur-md rounded-[5px] shadow-2xl 
-    border border-zinc-200 transition-all duration-300 hover:bg-blue-500 hover:scale-110 active:scale-95 group" aria-label="Scroll to top">
+    <a href="#home" onClick={scrollToTop}
+      className="fixed bottom-10 right-10 z-50 flex flex-col items-center justify-center w-14 h-14 bg-white/90 backdrop-blur-md rounded-[5px] 
+      shadow-2xl border border-zinc-200 transition-all duration-300 hover:bg-blue-500 hover:scale-110 active:scale-95 group" 
+      aria-label="Scroll to top">
       <span className="text-xl font-bold text-blue-500 group-hover:text-white group-hover:scale-125 transition-all duration-300">
         ↑
       </span>
