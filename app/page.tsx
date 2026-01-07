@@ -144,7 +144,7 @@ export default function Home() {
     { 
       id: "discord-bot", 
       title: "Discord Gemini Bot", 
-      period: "2025.12", 
+      period: "2025.11.24", 
       description: "Google Gemini AI를 연동한 실시간 대화형 디스코드 봇(개인)", 
       skills: ["Python", "Discord API", "Google Gemini AI", "Asyncio"], 
       pdfUrl: "", githubUrl: "https://github.com/JangYongMin/discord_gemini_bot", 
@@ -156,7 +156,7 @@ export default function Home() {
     { 
       id: "stock-news", 
       title: "Stock News View", 
-      period: "2025.12", 
+      period: "2025.11.25", 
       description: "실시간 주식 뉴스 수집기(개인)", 
       skills: ["JavaScript", "Node.js", "Web Scraping"], 
       pdfUrl: "", 
@@ -169,7 +169,7 @@ export default function Home() {
     { 
       id: "portfolio", 
       title: "Portfolio Web", 
-      period: "2025.12.31 ~ 2026.01.06", 
+      period: "2025.12.31 ~ 2026.01.07", 
       description: "Next.js 16 기반 반응형 포트폴리오 웹사이트(개인)", 
       skills: ["Next.js 16", "TypeScript", "Tailwind CSS", "Firebase"], 
       pdfUrl: "", 
