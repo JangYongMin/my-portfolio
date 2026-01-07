@@ -1,8 +1,9 @@
 'use client';
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, useSpring, useMotionValue, Variants } from "framer-motion";
+import { motion, useSpring, useMotionValue, Variants, AnimatePresence } from "framer-motion";
 
+// 프로젝트 데이터의 규격을 정의하는 인터페이스
 interface ProjectItem {
   id: string;
   title: string;
@@ -15,14 +16,21 @@ interface ProjectItem {
 }
 
 export default function Home() {
+  // 포트폴리오 배경 이미지 주소
   const bgImageUrl = "https://firebasestorage.googleapis.com/v0/b/portfolio-83772.firebasestorage.app/o/bg_portfolio.jpg?alt=media&token=bc3edafa-d2c0-4328-9479-2acdb5e503b7";
+  // 선택된 스킬 카테고리 상태 관리
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  // 선택된 프로젝트 상세 정보 상태 관리
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
 
+  // 메인 컨테이너 참조 변수
   const containerRef = useRef<HTMLElement>(null);
+  // 스크롤 위치값 연동을 위한 모션 밸류
   const yValue = useMotionValue(0); 
+  // 우측 네비게이터의 부드러운 움직임을 위한 스프링 애니메이션
   const springY = useSpring(yValue, { stiffness: 40, damping: 15 }); 
 
+  // 섹션 진입 시 스크롤 위치를 감지하여 상태 업데이트
   useEffect(() => {
     const sections = document.querySelectorAll("section");
     const observer = new IntersectionObserver((entries) => {
@@ -38,6 +46,7 @@ export default function Home() {
     return () => observer.disconnect();
   }, [yValue]);
 
+  // 스킬 섹션 모달에 표시될 상세 경력 데이터
   const skillDetails: { [key: string]: { subtitle: string; contents: string[] }[] } = {
     "LANGUAGES": [
       { 
@@ -62,7 +71,6 @@ export default function Home() {
         ] 
       },
     ],
-
     "FRAMEWORKS": [
       { 
         subtitle: "Spring Boot", contents: [
@@ -70,7 +78,6 @@ export default function Home() {
           "Service-Dao 계층 분리 및 @Transactional을 통한 데이터 무결성 보장"
         ] 
       },
-
       { 
         subtitle: "Next.js", contents: [
           "Next.js 15 App Router를 활용하여 서버 중심의 효율적인 페이지 구조 설계 및 최적화", 
@@ -79,7 +86,6 @@ export default function Home() {
           "사용자 인터랙션을 위한 Client Component와 성능 최적화를 위한 Server Component의 적절한 분리 및 활용"
         ] 
       },
-
       { 
         subtitle: "MyBatis", contents: [
           "RowBounds를 이용한 효율적인 서버 사이드 페이징 및 검색 동적 쿼리 최적화", 
@@ -88,7 +94,6 @@ export default function Home() {
         ] 
       }
     ],
-
     "DB & TOOLS": [
       { 
         subtitle: "Oracle", contents: [
@@ -97,7 +102,6 @@ export default function Home() {
           "메신저 기록 및 근태 데이터를 위한 대용량 텍스트(VARCHAR2 4000) 테이블 설계"
         ] 
       },
-
       { 
         subtitle: "Docker & GitHub", contents: [
           "Docker 컨테이너 환경을 활용한 개발 환경 표준화 및 배포 관리",
@@ -107,6 +111,7 @@ export default function Home() {
     ]
   };
 
+  // 프로젝트 섹션 카드에 표시될 데이터 모음
   const projectData: ProjectItem[] = [
     { 
       id: "library", 
@@ -167,13 +172,16 @@ export default function Home() {
       period: "2025.12.31 ~ 2026.01.06", 
       description: "Next.js 16 기반 반응형 포트폴리오 웹사이트(개인)", 
       skills: ["Next.js 16", "TypeScript", "Tailwind CSS", "Firebase"], 
-      pdfUrl: "", githubUrl: "https://github.com/JangYongMin/my-portfolio", 
-      details: ["App Router 및 Server/Client Component 최적화 설계", 
+      pdfUrl: "", 
+      githubUrl: "https://github.com/JangYongMin/my-portfolio", 
+      details: [
+        "App Router 및 Server/Client Component 최적화 설계", 
         "Docker 환경 기반의 효율적인 개발 프로세스 구축"
       ] 
     }
   ];
 
+  // 메인 타이틀 단어들이 순차적으로 올라오는 애니메이션 설정
   const wordVariants: Variants = {
     hidden: { opacity: 0, y: 50 },
     visible: (i: number) => ({
@@ -187,26 +195,29 @@ export default function Home() {
     })
   };
 
+  // 소셜 아이콘 그룹이 순차적으로 나타나는 컨테이너 애니메이션
   const socialContainerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         staggerChildren: 0.2, 
-        delayChildren: 0.5    
+        delayChildren: 0.8    
       }
     }
   };
 
+  // 개별 소셜 아이콘이 옆에서 튀어나오는 애니메이션
   const socialItemVariants: Variants = {
     hidden: { x: 50, opacity: 0 }, 
     visible: { 
       x: 0, 
       opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" } 
+      transition: { duration: 0.4, ease: "easeOut" } 
     }
   };
 
+  // 프로필 정보 항목들이 순차적으로 나타나는 컨테이너 애니메이션
   const infoContainerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -218,6 +229,7 @@ export default function Home() {
     }
   };
 
+  // 개별 프로필 정보가 위로 올라오며 나타나는 애니메이션
   const infoItemVariants: Variants = {
     hidden: { y: 20, opacity: 0 }, 
     visible: { 
@@ -227,10 +239,55 @@ export default function Home() {
     }
   };
 
+  // 스킬 카드 그룹 등장 애니메이션 설정
+  const skillContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2, 
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  // 개별 스킬 및 프로젝트 카드가 위로 올라오는 애니메이션
+  const skillCardVariants: Variants = {
+    hidden: { y: 30, opacity: 0 }, 
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { duration: 0.6, ease: "easeOut" } 
+    }
+  };
+
+  // 프로필 사진이 옆에서 나타나는 등장 애니메이션
+  const profileImageVariants: Variants = {
+    hidden: { x: -50, opacity: 0, scale: 0.9 }, 
+    visible: { 
+      x: 0, 
+      opacity: 1, 
+      scale: 1,
+      transition: { duration: 0.8, ease: "easeOut" } 
+    }
+  };
+
+  // 프로젝트 카드들이 순차적으로 나타나는 컨테이너 애니메이션
+  const projectContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.4
+      }
+    }
+  };
+
   return (
     <main ref={containerRef} className="h-screen overflow-y-auto snap-y snap-mandatory no-scrollbar scroll-smooth relative will-change-scroll bg-gradient-to-b from-zinc-800 via-zinc-900 to-black text-white">
       
-      {/* 1. HERO SECTION */}
+      {/* 히어로 섹션: 메인 타이틀과 슬로건 표시 */}
       <section id="home" className="h-screen w-full snap-start snap-always flex flex-col md:flex-row items-center justify-center 
       px-10 md:px-20 bg-transparent overflow-hidden">
         <div className="flex-1 text-center md:text-left drop-shadow-2xl md:pl-32">
@@ -247,9 +304,19 @@ export default function Home() {
             <br />
             <motion.div custom={3} variants={wordVariants} className="text-orange-600 inline-block">LIFE</motion.div>
           </motion.div>
-          <p className="mt-8 text-lg md:text-xl text-white/90 font-medium max-w-lg">나만의 가치를 만드는 개발자, 장용민입니다.</p>
+          
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: false }}
+            className="mt-8 text-lg md:text-xl text-white/90 font-medium max-w-lg"
+          >
+            나만의 가치를 만드는 개발자, 장용민입니다.
+          </motion.p>
         </div>
         
+        {/* 우측 퀵 네비게이터 도트 메뉴 */}
         <motion.div 
           style={{ top: "50%", marginTop: springY }}
           className="absolute right-10 flex flex-col gap-8 z-50 pointer-events-auto"
@@ -260,7 +327,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* 2. PROFILE SECTION */}
+      {/* 프로필 섹션: 사진, 소셜 링크, 인적 사항 표시 */}
       <section id="profile" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-transparent z-10 overflow-hidden">
         <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
           <div className="flex items-center gap-6">
@@ -275,17 +342,23 @@ export default function Home() {
                 <SocialIcon href="https://github.com/JangYongMin" icon="github" src="/icons/github-mark.png" />
               </motion.div>
               <motion.div variants={socialItemVariants}>
-                <SocialIcon href="https://discord.gg/SPamqcaV4d" icon="discord" src="/icons/Discord-Symbol-Black.png" />
+                <SocialIcon href="https://discord.gg/SPamqcaV4d" icon="discord" src="/icons/Discord-Symbol-White.png" />
               </motion.div>
               <motion.div variants={socialItemVariants}>
-                <SocialIcon href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2/" icon="linkedin" src="/icons/InBug-Black.png" />
+                <SocialIcon href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2/" icon="linkedin" src="/icons/InBug-White.png" />
               </motion.div>
             </motion.div>
 
-            <div className="relative w-64 md:w-80 lg:w-96 aspect-square bg-zinc-200 rounded-[5px] shadow-xl overflow-hidden shrink-0 z-10">
+            <motion.div 
+              className="relative w-64 md:w-80 lg:w-96 aspect-square bg-zinc-200 rounded-[5px] shadow-xl overflow-hidden shrink-0 z-10"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: false, amount: 0.5 }}
+              variants={profileImageVariants}
+            >
               <Image src="https://firebasestorage.googleapis.com/v0/b/portfolio-83772.firebasestorage.app/o/profile.jpg?alt=media&token=401a5e0d-4ad0-443e-b822-cca6b9bf85b8" 
               alt="Jang Yongmin" fill className="object-cover" priority />
-            </div>
+            </motion.div>
           </div>
 
           <motion.div 
@@ -312,65 +385,92 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. SKILLS SECTION */}
-      <section id="skills" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-transparent z-10 overflow-hidden">
+      {/* 스킬 섹션: 주요 기술 스택 카테고리별 카드 표시 */}
+      <section id="skills" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-transparent z-10 px-10 md:px-20 overflow-hidden">
         <div className="max-w-6xl w-full flex flex-col items-center">
-          <div className="text-center mb-16">
+          <motion.div 
+            className="text-center mb-16"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.5 }}
+            variants={infoItemVariants}
+          >
             <div className="relative inline-flex">
               <h2 className="text-5xl md:text-7xl font-black text-white mb-4 tracking-tighter uppercase relative z-10">
                 Skills
               </h2>
               <div className="absolute -bottom-[-15px] left-0 w-full h-4 md:h-5 bg-blue-600 -rotate-1"></div>
             </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-14 lg:gap-18 cursor-pointer w-full">
-            <div onClick={() => setSelectedCategory("LANGUAGES")}>
+          </motion.div>
+
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-3 gap-14 lg:gap-18 cursor-pointer w-full"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.3 }}
+            variants={skillContainerVariants}
+          >
+            <motion.div variants={skillCardVariants} onClick={() => setSelectedCategory("LANGUAGES")}>
               <SkillCategory title="LANGUAGES">
-              <SkillItem name="Java" src="/icons/java-logo.png" />
-              <SkillItem name="JavaScript" src="/icons/javaScript-logo.png" />
-              <SkillItem name="Python" src="/icons/python-logo-only.png" />
+                <SkillItem name="Java" src="/icons/java-logo.png" />
+                <SkillItem name="JavaScript" src="/icons/javaScript-logo.png" />
+                <SkillItem name="Python" src="/icons/python-logo-only.png" />
               </SkillCategory>
-            </div>
-            <div onClick={() => setSelectedCategory("FRAMEWORKS")}>
+            </motion.div>
+            <motion.div variants={skillCardVariants} onClick={() => setSelectedCategory("FRAMEWORKS")}>
               <SkillCategory title="FRAMEWORKS">
-              <SkillItem name="Spring Boot" src="/icons/spring-boot.png" />
-              <SkillItem name="Next.js" src="/icons/nextjs-logo.png" />
-              <SkillItem name="MyBatis" src="/icons/logo-bird-ninja.png" />
+                <SkillItem name="Spring Boot" src="/icons/spring-boot.png" />
+                <SkillItem name="Next.js" src="/icons/nextjs-logo.png" />
+                <SkillItem name="MyBatis" src="/icons/logo-bird-ninja.png" />
               </SkillCategory>
-            </div>
-            <div onClick={() => setSelectedCategory("DB & TOOLS")}>
+            </motion.div>
+            <motion.div variants={skillCardVariants} onClick={() => setSelectedCategory("DB & TOOLS")}>
               <SkillCategory title="DB & TOOLS">
-              <SkillItem name="Oracle" src="/icons/oracleDB-logo.png" />
-              <SkillItem name="Docker" src="/icons/docker-mark-blue.png" />
-              <SkillItem name="GitHub" src="/icons/github-mark.png" />
+                <SkillItem name="Oracle" src="/icons/oracleDB-logo.png" />
+                <SkillItem name="Docker" src="/icons/docker-mark-blue.png" />
+                <SkillItem name="GitHub" src="/icons/github-mark.png" />
               </SkillCategory>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-      {/* 4. PROJECTS + FOOTER 통합 섹션 */}
+      {/* 프로젝트 섹션: 수행한 프로젝트 목록 및 상세 정보 제공 */}
       <section id="project-container" className="h-screen w-full snap-start snap-always overflow-y-auto no-scrollbar bg-transparent z-20 overflow-hidden">
         <div className="flex flex-col min-h-full">
           <div id="projects" className="min-h-screen w-full flex flex-col items-center px-10 py-32 shrink-0">
             <div className="max-w-6xl w-full flex flex-col items-center">
               <div className="text-center mb-16">
-                <div className="relative inline-flex">
+                <motion.div 
+                  className="relative inline-flex"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: false, amount: 0.5 }}
+                  variants={infoItemVariants}
+                >
                   <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase relative z-10">
                     Projects
                   </h2>
                   <div className="absolute -bottom-[2px] left-0 w-full h-4 md:h-5 bg-orange-600 -rotate-1"></div>
-                </div>
+                </motion.div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full mb-20">
+              
+              <motion.div 
+                className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full mb-20"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.2 }}
+                variants={projectContainerVariants}
+              >
                 {projectData.map((project: ProjectItem) => (
-                  <ProjectCard 
-                    key={project.id} 
-                    project={project} 
-                    onClick={() => setSelectedProject(project)} 
-                  />
+                  <motion.div key={project.id} variants={skillCardVariants}>
+                    <ProjectCard 
+                      project={project} 
+                      onClick={() => setSelectedProject(project)} 
+                    />
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
           </div>
           <div className="w-full shrink-0">
@@ -379,17 +479,35 @@ export default function Home() {
         </div>
       </section>
 
-      {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
-      {selectedCategory && <SkillModal category={selectedCategory} details={skillDetails[selectedCategory]} onClose={() => setSelectedCategory(null)} />}
+      {/* 모달 애니메이션 처리를 위한 AnimatePresence 영역 */}
+      <AnimatePresence>
+        {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
+        {selectedCategory && <SkillModal category={selectedCategory} details={skillDetails[selectedCategory]} onClose={() => setSelectedCategory(null)} />}
+      </AnimatePresence>
 
       <TopButton />
     </main>
   );
 }
 
+
+
+
+// --------------------------------------------------------------------------
+// UI 컴포넌트 정의
+// --------------------------------------------------------------------------
+
+
+
+
+// 우측 네비게이터 도트 컴포넌트
 function QuickDotMenu({ href, label, hoverColor }: { href: string; label: string; hoverColor: string }) {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const projectContainer = document.getElementById('project-container');
+    if (projectContainer) { projectContainer.scrollTo({ top: 0 }); }
+  };
   return (
-    <a href={href} className="group relative flex items-center justify-end">
+    <a href={href} onClick={handleClick} className="group relative flex items-center justify-end">
       <span className="absolute right-8 text-white font-black tracking-widest text-sm opacity-0 -translate-x-2 
       group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out pointer-events-none">
         {label}
@@ -399,115 +517,280 @@ function QuickDotMenu({ href, label, hoverColor }: { href: string; label: string
   );
 }
 
+// 프로필 섹션의 소셜 미디어 아이콘 컴포넌트
 function SocialIcon({ href, icon, src }: { href: string; icon: string; src: string }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" 
     className="group relative w-4 h-4 flex items-center justify-center">
       <div className="absolute w-3 h-3 bg-white rounded-full transition-all duration-300 group-hover:opacity-0 group-hover:scale-0" />
-      <motion.div 
-        className="absolute w-8 h-8 opacity-0 scale-50 transition-all duration-300 group-hover:opacity-100 group-hover:scale-125"
-        whileHover={{ rotate: 5 }}
-      >
-        <Image src={src} alt={icon} fill className="object-contain invert brightness-200" />
+      <motion.div className="absolute w-8 h-8 opacity-0 scale-50 transition-all duration-300 group-hover:opacity-100 group-hover:scale-125" whileHover={{ rotate: 5 }}>
+        <Image src={src} alt={icon} fill className="object-contain" />
       </motion.div>
     </a>
   );
 }
 
+// 프로필 상세 텍스트 정보 레이아웃 컴포넌트
+function ProfileItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-start">
+      <span className="w-24 md:w-32 text-zinc-400 font-bold tracking-tighter shrink-0">{label}</span>
+      <span className="text-white font-semibold">{value}</span>
+    </div>
+  );
+}
+
+// 개별 프로젝트 정보 요약 카드 컴포넌트
 function ProjectCard({ project, onClick }: { project: ProjectItem; onClick: () => void }) {
   return (
-    <div onClick={onClick} 
-    className="group bg-zinc-700/50 backdrop-blur-md p-10 rounded-[5px] border-[2px] border-zinc-200 cursor-pointer transition-all 
-    duration-300 hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)] hover:border-blue-500/30 
-    flex flex-col justify-between h-full">
+    <div onClick={onClick} className="group bg-orange-950/10 backdrop-blur-sm p-10 rounded-[5px] border-[2px] border-orange-900/20 transition-all duration-500 ease-out hover:-translate-y-3 hover:bg-orange-900/20 hover:border-orange-500/50 hover:shadow-[0_0_40px_rgba(234,88,12,0.15)] flex flex-col justify-between h-full cursor-pointer">
       <div>
-        <span className="text-zinc-400 font-bold text-sm">{project.period}</span>
-        <h3 className="text-3xl font-black text-white mt-2 mb-4 group-hover:text-blue-500 transition-colors uppercase">{project.title}</h3>
+        <span className="text-zinc-400 font-bold text-sm group-hover:text-orange-400/80 transition-colors">{project.period}</span>
+        <h3 className="text-3xl font-black text-white mt-2 mb-4 group-hover:text-orange-500 transition-colors uppercase">{project.title}</h3>
         <p className="text-zinc-100 font-medium mb-6 leading-relaxed">{project.description}</p>
       </div>
       <div className="flex flex-wrap gap-2">
         {project.skills.map((skill: string) => (
-          <span key={skill} className="px-3 py-1 bg-zinc-800 text-zinc-300 text-xs font-bold rounded-full">
-            {skill}
-          </span>
+          <span key={skill} className="px-3 py-1 bg-zinc-800 text-zinc-300 text-xs font-bold rounded-full group-hover:bg-orange-900/30 group-hover:text-orange-200 transition-colors">{skill}</span>
         ))}
       </div>
     </div>
   );
 }
 
-function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () => void }) {
+// 프로젝트 상세 내용을 보여주는 모달 컴포넌트
+function ProjectModal({ 
+  project, 
+  onClose 
+}: { 
+  project: ProjectItem; 
+  onClose: () => void 
+}) {
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/50 backdrop-blur-[2px] p-4" onClick={onClose}>
-      <div className="bg-zinc-800 w-fit max-w-[95%] md:max-w-[70%] rounded-[5px] border-[2px] border-zinc-200 p-8 md:p-16 shadow-sm overflow-y-auto max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }} 
+      className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-[2px] p-4" 
+      onClick={onClose}
+    >
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0, y: 20 }} 
+        animate={{ scale: 1, opacity: 1, y: 0 }} 
+        exit={{ scale: 0.9, opacity: 0 }} 
+        transition={{ type: "spring", damping: 25, stiffness: 300 }} 
+        className="bg-[#1a0f05]/95 backdrop-blur-xl w-full max-w-[95%] md:max-w-[60%] 
+                   rounded-[5px] border-[2px] border-orange-500/30 p-8 md:p-16 
+                   shadow-sm overflow-y-auto max-h-[90vh] no-scrollbar" 
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 모달 헤더: 프로젝트 제목 및 닫기 버튼 */}
         <div className="flex justify-between items-center mb-10">
-          <h3 className="text-3xl font-black text-white uppercase">{project.title}</h3>
-          <button onClick={onClose} className="text-zinc-400 hover:text-white transition-colors shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          <h3 className="text-3xl font-black text-white uppercase">
+            {project.title}
+          </h3>
+          <button 
+            onClick={onClose} 
+            className="text-zinc-400 hover:text-white transition-colors shrink-0"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6 6 18"/>
+              <path d="m6 6 12 12"/>
+            </svg>
           </button>
         </div>
+
+        {/* 모달 컨텐츠: 2컬럼 레이아웃 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
+          {/* 왼쪽 컬럼: 주요 성과 리스트 */}
           <div>
-            <h4 className="text-xl font-bold text-white mb-5 uppercase tracking-tighter">Key Accomplishments</h4>
+            <h4 className="text-xl font-bold text-white mb-5 uppercase tracking-tighter">
+              Key Accomplishments
+            </h4>
             <ul className="space-y-4">
               {project.details.map((detail, i) => (
-                <li key={i} className="text-zinc-100 font-medium leading-relaxed flex items-start gap-3 text-lg"><span className="text-blue-500 mt-2 text-[8px] shrink-0">●</span><span className="break-words text-white">{detail}</span></li>
+                <li 
+                  key={i} 
+                  className="text-zinc-100 font-medium leading-relaxed flex items-start gap-3 text-lg"
+                >
+                  <span className="text-orange-500 mt-2 text-[8px] shrink-0">●</span>
+                  <span className="break-words text-white">
+                    {detail}
+                  </span>
+                </li>
               ))}
             </ul>
           </div>
+
+          {/* 오른쪽 컬럼: 사용 기술 및 링크 버튼 */}
           <div className="flex flex-col justify-between">
+            {/* 사용 기술 태그 영역 */}
             <div>
-              <h4 className="text-xl font-bold text-white mb-5 uppercase tracking-tighter">Used Skills</h4>
-              <div className="flex flex-wrap gap-2 mb-8">{project.skills.map((skill) => (<span key={skill} className="px-4 py-2 bg-blue-900 text-blue-200 text-sm font-bold rounded-lg">{skill}</span>))}</div>
+              <h4 className="text-xl font-bold text-white mb-5 uppercase tracking-tighter">
+                Used Skills
+              </h4>
+              <div className="flex flex-wrap gap-2 mb-8">
+                {project.skills.map((skill) => (
+                  <span 
+                    key={skill} 
+                    className="px-4 py-2 bg-orange-900/50 text-orange-200 text-sm 
+                               font-bold rounded-lg border border-orange-500/30"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
             </div>
+
+            {/* 외부 링크 버튼 그룹 */}
             <div className="flex flex-col gap-3">
-              {project.githubUrl && (<a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="w-full py-4 bg-zinc-800 text-white text-center font-bold rounded-[5px] hover:bg-zinc-700 transition-colors flex items-center justify-center gap-3 border border-zinc-700"><Image src="/icons/github-mark.png" alt="GitHub" width={20} height={20} className="invert" />GitHub</a>)}
-              {project.pdfUrl && project.pdfUrl !== "" && (<a href={project.pdfUrl} target="_blank" rel="noopener noreferrer" className="w-full py-4 bg-blue-600 text-white text-center font-bold rounded-[5px] hover:bg-blue-700 transition-colors flex items-center justify-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>PDF</a>)}
+              {project.githubUrl && (
+                <a 
+                  href={project.githubUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="w-full py-4 bg-zinc-800 text-white text-center font-bold 
+                             rounded-[5px] hover:bg-zinc-700 transition-colors 
+                             flex items-center justify-center gap-3 border border-zinc-700"
+                >
+                  <Image src="/icons/github-mark.png" alt="GitHub" width={20} height={20} className="invert" />
+                  GitHub
+                </a>
+              )}
+              
+              {project.pdfUrl && project.pdfUrl !== "" && (
+                <a 
+                  href={project.pdfUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="w-full py-4 bg-orange-600 text-white text-center font-bold 
+                             rounded-[5px] hover:bg-orange-700 transition-colors 
+                             flex items-center justify-center gap-3"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                  </svg>
+                  PDF
+                </a>
+              )}
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
-function SkillModal({ category, details, onClose }: { category: string; details: any[]; onClose: () => void }) {
+// 스킬 상세 경력을 보여주는 모달 컴포넌트
+function SkillModal({ 
+  category, 
+  details, 
+  onClose 
+}: { 
+  category: string; 
+  details: any[]; 
+  onClose: () => void 
+}) {
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-[2px] p-4" onClick={onClose}>
-      <div className="bg-zinc-800 w-fit max-w-[95%] md:max-w-[85%] rounded-[5px] border-[2px] border-zinc-200 p-8 md:p-16 shadow-sm max-h-[90vh] overflow-y-auto text-left" onClick={(e) => e.stopPropagation()}>
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }} 
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" 
+      onClick={onClose}
+    >
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0, y: 20 }} 
+        animate={{ scale: 1, opacity: 1, y: 0 }} 
+        exit={{ scale: 0.9, opacity: 0 }} 
+        transition={{ type: "spring", damping: 25, stiffness: 300 }} 
+        className="bg-[#0a1120]/95 backdrop-blur-xl w-full max-w-[95%] md:max-w-[60%] 
+                   rounded-[5px] border-[2px] border-blue-500/30 p-8 md:p-16 
+                   shadow-[0_0_50px_rgba(37,99,235,0.15)] max-h-[90vh] 
+                   overflow-y-auto text-left no-scrollbar" 
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 모달 헤더: 카테고리 제목 및 닫기 버튼 */}
         <div className="flex justify-between items-center mb-10 md:mb-16 gap-10">
-          <h3 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase">{category} EXPERIENCE</h3>
-          <button onClick={onClose} className="text-zinc-400 hover:text-white transition-colors shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+          <h3 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase">
+            {category} EXPERIENCE
+          </h3>
+          <button 
+            onClick={onClose} 
+            className="text-zinc-400 hover:text-white transition-colors shrink-0"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6 6 18"/>
+              <path d="m6 6 12 12"/>
+            </svg>
+          </button>
         </div>
-        <div className={`grid grid-cols-1 ${details.length === 3 ? 'md:grid-cols-3' : details.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-x-12 gap-y-10`}>
+
+        {/* 모달 컨텐츠: 상세 항목 그리드 레이아웃 */}
+        <div className={`grid grid-cols-1 gap-x-12 gap-y-10 ${
+          details.length === 3 ? 'md:grid-cols-3' : 
+          details.length === 2 ? 'md:grid-cols-2' : 
+          'md:grid-cols-1'
+        }`}>
           {details.map((group, i) => (
-            <div key={i} className="flex flex-col min-w-0">
-              <h4 className="text-xl md:text-2xl font-black text-white mb-6 flex items-center gap-3"><span className="w-1.5 h-7 bg-blue-500 rounded-full shrink-0"></span>{group.subtitle}</h4>
-              <ul className="space-y-5">{group.contents.map((desc: string, j: number) => (<li key={j} className="text-[15px] md:text-[17px] font-medium text-zinc-100 leading-relaxed flex items-start gap-3"><span className="text-blue-500 mt-2.5 text-[10px] shrink-0">●</span><span className="break-words overflow-wrap-anywhere text-zinc-300">{desc}</span></li>))}</ul>
-            </div>
+            <motion.div 
+              key={i} 
+              initial={{ opacity: 0, y: 15 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ delay: 0.1 * (i + 1) }} 
+              className="flex flex-col min-w-0"
+            >
+              {/* 소제목 (Java, Next.js 등) */}
+              <h4 className="text-xl md:text-2xl font-black text-white mb-6 flex items-center gap-3">
+                <span className="w-1.5 h-7 bg-blue-500 rounded-full shrink-0"></span>
+                {group.subtitle}
+              </h4>
+
+              {/* 상세 설명 리스트 */}
+              <ul className="space-y-5">
+                {group.contents.map((desc: string, j: number) => (
+                  <li 
+                    key={j} 
+                    className="text-[15px] md:text-[17px] font-medium text-zinc-100 
+                               leading-relaxed flex items-start gap-3"
+                  >
+                    <span className="text-blue-500 mt-2.5 text-[10px] shrink-0">●</span>
+                    <span className="break-words overflow-wrap-anywhere text-zinc-300">
+                      {desc}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// 스킬 카테고리 레이아웃 컴포넌트
+function SkillCategory({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="group bg-blue-950/10 backdrop-blur-sm p-6 lg:p-8 rounded-[5px] border-[2px] border-blue-900/20 transition-all duration-500 ease-out hover:-translate-y-3 hover:bg-blue-900/20 hover:border-blue-500/50 hover:shadow-[0_0_40px_rgba(37,99,235,0.15)] w-full h-full">
+      <h3 className="text-xl lg:text-2xl font-black text-white group-hover:text-blue-400 mb-6 tracking-tighter border-b-2 border-zinc-700 pb-2 uppercase text-center transition-colors">{title}</h3>
+      <div className="grid grid-cols-2 gap-4">{children}</div>
     </div>
   );
 }
 
-function QuickMenuIcon({ href, emoji, label }: { href: string; emoji: string; label: string }) {
-  return (<a href={href} className="group flex flex-col items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-xl rounded-[5px] border border-white/30 hover:bg-white/40 transition-all duration-300 shadow-2xl"><span className="text-3xl group-hover:scale-110 transition-transform">{emoji}</span><span className="text-[10px] mt-2 font-black text-white group-hover:text-blue-300 tracking-widest uppercase">{label}</span></a>);
-}
-
-function ProfileItem({ label, value }: { label: string; value: string }) {
-  return (<div className="flex items-start"><span className="w-24 md:w-32 text-zinc-400 font-bold tracking-tighter shrink-0">{label}</span><span className="text-white font-semibold">{value}</span></div>);
-}
-
-function SkillCategory({ title, children }: { title: string; children: React.ReactNode }) {
-  return (<div className="group bg-zinc-700/50 backdrop-blur-md p-6 lg:p-8 rounded-[5px] border-[2px] border-zinc-200 transition-all duration-300 ease-out hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)] hover:border-blue-500/30"><h3 className="text-xl lg:text-2xl font-black text-blue-500 mb-6 tracking-tighter border-b-2 border-zinc-700 pb-2 uppercase text-center">{title}</h3><div className="grid grid-cols-2 gap-4">{children}</div></div>);
-}
-
+// 스킬 아이콘과 이름을 표시하는 개별 아이템 컴포넌트
 function SkillItem({ name, src }: { name: string; src: string }) {
-  return (<div className="flex flex-col items-center gap-2 p-1"><div className="relative w-10 h-10 lg:w-12 lg:h-12 grayscale group-hover:grayscale-0 transition-all duration-500"><Image src={src} alt={name} fill className="object-contain" /></div><span className="text-[10px] lg:text-xs font-bold text-zinc-400 group-hover:text-white transition-colors duration-500 uppercase">{name}</span></div>);
+  return (
+    <div className="flex flex-col items-center gap-2 p-1">
+      <div className="relative w-10 h-10 lg:w-12 lg:h-12 grayscale group-hover:grayscale-0 transition-all duration-500 overflow-hidden"><Image src={src} alt={name} fill className="object-contain" /></div>
+      <span className="text-[10px] lg:text-xs font-bold text-zinc-400 group-hover:text-white transition-colors duration-500 uppercase">{name}</span>
+    </div>
+  );
 }
 
+// 페이지 하단 푸터 컴포넌트
 function Footer() {
   return (
     <footer className="w-full py-15 bg-zinc-900/80 backdrop-blur-md text-white flex flex-col items-center justify-center gap-6">
@@ -521,23 +804,19 @@ function Footer() {
   );
 }
 
+// 최상단 이동 버튼 컴포넌트
 function TopButton() {
   const scrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const mainContent = document.querySelector('main');
-    if (mainContent) {
-      mainContent.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    if (mainContent) { mainContent.scrollTo({ top: 0, behavior: 'smooth' }); }
     const projectContainer = document.getElementById('project-container');
-    if (projectContainer) {
-      projectContainer.scrollTo({ top: 0 });
-    }
+    if (projectContainer) { projectContainer.scrollTo({ top: 0 }); }
   };
-
   return (
     <a href="#home" onClick={scrollToTop} className="fixed bottom-10 right-10 z-50 group flex items-center justify-end" aria-label="Scroll to top">
       <span className="absolute right-8 text-white font-black tracking-widest text-sm opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out pointer-events-none">TOP</span>
-      <div className="w-3 h-3 bg-white rounded-full transition-all duration-300 group-hover:scale-150 shadow-lg" />
+      <div className={`w-3 h-3 bg-white rounded-full transition-all duration-300 group-hover:scale-150 shadow-lg`} />
     </a>
   );
 }
