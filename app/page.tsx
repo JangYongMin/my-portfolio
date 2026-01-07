@@ -1,6 +1,7 @@
 'use client';
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { motion, useSpring, useMotionValue, Variants } from "framer-motion";
 
 interface ProjectItem {
   id: string;
@@ -17,6 +18,25 @@ export default function Home() {
   const bgImageUrl = "https://firebasestorage.googleapis.com/v0/b/portfolio-83772.firebasestorage.app/o/bg_portfolio.jpg?alt=media&token=bc3edafa-d2c0-4328-9479-2acdb5e503b7";
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+
+  const containerRef = useRef<HTMLElement>(null);
+  const yValue = useMotionValue(0); 
+  const springY = useSpring(yValue, { stiffness: 40, damping: 15 }); 
+
+  useEffect(() => {
+    const sections = document.querySelectorAll("section");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const targetY = (entry.target as HTMLElement).offsetTop;
+          yValue.set(targetY);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [yValue]);
 
   const skillDetails: { [key: string]: { subtitle: string; contents: string[] }[] } = {
     "LANGUAGES": [
@@ -87,9 +107,6 @@ export default function Home() {
     ]
   };
 
-
-
-  
   const projectData: ProjectItem[] = [
     { 
       id: "library", 
@@ -157,41 +174,53 @@ export default function Home() {
     }
   ];
 
+  // 🔥 런타임 에러 수정을 위해 ease 값을 유효한 범위(0~1)로 조정
+  const wordVariants: Variants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.2,
+        duration: 0.8,
+        ease: [0.25, 0.1, 0.25, 1] // 유효한 cubic-bezier 값으로 변경
+      }
+    })
+  };
 
   return (
-    <main className="h-screen overflow-y-auto snap-y snap-mandatory no-scrollbar scroll-smooth relative will-change-scroll">
+    <main ref={containerRef} className="h-screen overflow-y-auto snap-y snap-mandatory no-scrollbar scroll-smooth relative will-change-scroll bg-gradient-to-b from-zinc-800 via-zinc-900 to-black text-white">
       
-
-      {/* 배경 이미지 */}
-      <div className="fixed inset-0 -z-10">
-        <Image src={bgImageUrl} alt="Background" fill priority className="object-cover opacity-60" />
-      </div>
-
-
-
       {/* 1. HERO SECTION */}
       <section id="home" className="h-screen w-full snap-start snap-always flex flex-col md:flex-row items-center justify-center 
       px-10 md:px-20 bg-transparent overflow-hidden">
         <div className="flex-1 text-center md:text-left drop-shadow-2xl md:pl-32">
-          <h1 className="text-6xl md:text-[10rem] font-black tracking-tighter text-white leading-[0.85]">
-            CREATE <br /> MY <span className="text-blue-500">OWN</span> <br /> LIFE
-          </h1>
+          <div className="text-6xl md:text-[10rem] font-black tracking-tighter text-white leading-[0.85] uppercase">
+            <motion.div custom={0} initial="hidden" animate="visible" variants={wordVariants} className="text-pink-600 inline-block">CREATE</motion.div>
+            <br />
+            <motion.div custom={1} initial="hidden" animate="visible" variants={wordVariants} className="inline-block">MY</motion.div>{" "}
+            <motion.div custom={2} initial="hidden" animate="visible" variants={wordVariants} className="text-blue-500 inline-block">OWN</motion.div>
+            <br />
+            <motion.div custom={3} initial="hidden" animate="visible" variants={wordVariants} className="text-orange-600 inline-block">LIFE</motion.div>
+          </div>
           <p className="mt-8 text-lg md:text-xl text-white/90 font-medium max-w-lg">나만의 가치를 만드는 개발자, 장용민입니다.</p>
         </div>
-        <div className="flex flex-row md:flex-col gap-5 mt-12 md:mt-0 z-20">
-          <QuickMenuIcon href="#profile" emoji="👤" label="PROFILE" />
-          <QuickMenuIcon href="#skills" emoji="🛠️" label="SKILLS" />
-          <QuickMenuIcon href="#projects" emoji="📁" label="PROJECTS" />
-        </div>
+        
+        <motion.div 
+          style={{ top: "50%", marginTop: springY }}
+          className="absolute right-10 flex flex-col gap-8 z-50 pointer-events-auto"
+        >
+          <QuickDotMenu href="#profile" label="PROFILE" hoverColor="group-hover:bg-pink-600" />
+          <QuickDotMenu href="#skills" label="SKILLS" hoverColor="group-hover:bg-blue-600" />
+          <QuickDotMenu href="#projects" label="PROJECTS" hoverColor="group-hover:bg-orange-600" />
+        </motion.div>
       </section>
 
-
-
       {/* 2. PROFILE SECTION */}
-      <section id="profile" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-zinc-100 z-10 overflow-hidden">
+      <section id="profile" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-transparent z-10 overflow-hidden">
         <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
           <div className="flex items-center gap-6">
-            <div className="flex flex-col gap-4 shrink-0">
+            <div className="flex flex-col gap-8 shrink-0 pr-4">
               <SocialIcon href="https://github.com/JangYongMin" icon="github" src="/icons/github-mark.png" />
               <SocialIcon href="https://discord.gg/SPamqcaV4d" icon="discord" src="/icons/Discord-Symbol-Black.png" />
               <SocialIcon href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2/" icon="linkedin" src="/icons/InBug-Black.png" />
@@ -202,8 +231,11 @@ export default function Home() {
             </div>
           </div>
           <div className="flex flex-col gap-6 text-left shrink-0">
-            <h2 className="text-4xl md:text-5xl font-black text-black mb-4 tracking-tight uppercase">Profile</h2>
-            <div className="space-y-4 text-lg md:text-xl font-medium text-zinc-800">
+            <div className="relative inline-flex mb-4">
+              <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight uppercase relative z-10">Profile</h2>
+              <div className="absolute -bottom-[3px] left-0 w-55 h-3 md:h-4 bg-pink-600 -rotate-1"></div>
+            </div>
+            <div className="space-y-4 text-lg md:text-xl font-medium text-zinc-100">
               <ProfileItem label="이름" value="장용민" />
               <ProfileItem label="생년월일" value="01.08.02" />
               <ProfileItem label="위치" value="서울특별시 영등포구" />
@@ -215,16 +247,16 @@ export default function Home() {
         </div>
       </section>
 
-
-
       {/* 3. SKILLS SECTION */}
-      <section id="skills" className="relative h-screen w-full snap-start snap-always flex items-center justify-center 
-      bg-zinc-200 z-10 overflow-hidden">
+      <section id="skills" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-transparent z-10 overflow-hidden">
         <div className="max-w-6xl w-full flex flex-col items-center">
           <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-7xl font-black text-black mb-4 tracking-tighter uppercase">
-              Skills
-            </h2>
+            <div className="relative inline-flex">
+              <h2 className="text-5xl md:text-7xl font-black text-white mb-4 tracking-tighter uppercase relative z-10">
+                Skills
+              </h2>
+              <div className="absolute -bottom-[-15px] left-0 w-full h-4 md:h-5 bg-blue-600 -rotate-1"></div>
+            </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-14 lg:gap-18 cursor-pointer w-full">
             <div onClick={() => setSelectedCategory("LANGUAGES")}>
@@ -252,57 +284,36 @@ export default function Home() {
         </div>
       </section>
 
-
-
-      {/* 4. PROJECTS + FOOTER 통합 섹션 (자유스크롤)*/}
-      <section id="project-container" className="h-screen w-full snap-start snap-always overflow-y-auto no-scrollbar bg-white z-20 overflow-hidden">
+      {/* 4. PROJECTS + FOOTER 통합 섹션 */}
+      <section id="project-container" className="h-screen w-full snap-start snap-always overflow-y-auto no-scrollbar bg-transparent z-20 overflow-hidden">
         <div className="flex flex-col min-h-full">
           <div id="projects" className="min-h-screen w-full flex flex-col items-center px-10 py-32 shrink-0">
             <div className="max-w-6xl w-full flex flex-col items-center">
-
               <div className="text-center mb-16">
-                <h2 className="text-5xl md:text-7xl font-black text-black tracking-tighter uppercase">
-                  Projects
-                </h2>
+                <div className="relative inline-flex">
+                  <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase relative z-10">
+                    Projects
+                  </h2>
+                  <div className="absolute -bottom-[2px] left-0 w-full h-4 md:h-5 bg-orange-600 -rotate-1"></div>
+                </div>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full mb-20">
                 {projectData.map((project: ProjectItem) => (
-                  <div key={project.id} onClick={() => setSelectedProject(project)} 
-                  className="group bg-white p-10 rounded-[5px] border-[2px] border-zinc-100 cursor-pointer transition-all 
-                  duration-300 hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:border-blue-500/30 
-                  flex flex-col justify-between h-full">
-                    
-                    <div>
-                      <span className="text-zinc-400 font-bold text-sm">{project.period}</span>
-                      <h3 className="text-3xl font-black text-black mt-2 mb-4 group-hover:text-blue-500 transition-colors uppercase">{project.title}</h3>
-                      <p className="text-zinc-600 font-medium mb-6 leading-relaxed">{project.description}</p>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2">
-                      {project.skills.map((skill: string) => (
-                        <span key={skill} className="px-3 py-1 bg-zinc-100 text-zinc-500 text-xs font-bold rounded-full">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-
-                  </div>
+                  <ProjectCard 
+                    key={project.id} 
+                    project={project} 
+                    onClick={() => setSelectedProject(project)} 
+                  />
                 ))}
               </div>
-
             </div>
           </div>
-
-
-          {/* 푸터 영역 */}
           <div className="w-full shrink-0">
             <Footer />
           </div>
         </div>
       </section>
 
-      {/* 상세 모달 창들 */}
       {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
       {selectedCategory && <SkillModal category={selectedCategory} details={skillDetails[selectedCategory]} onClose={() => setSelectedCategory(null)} />}
 
@@ -311,278 +322,148 @@ export default function Home() {
   );
 }
 
-
-
-
-//상세 모달 컴포넌트 (Project)
-function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () => void }) {
+function QuickDotMenu({ href, label, hoverColor }: { href: string; label: string; hoverColor: string }) {
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/50 backdrop-blur-[2px] p-4" onClick={onClose}>
-      <div className="bg-white w-fit max-w-[95%] md:max-w-[70%] rounded-[5px] border-[2px] border-zinc-200 p-8 md:p-16 shadow-sm overflow-y-auto max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
-        <div className="flex justify-between items-center mb-10">
-          <h3 className="text-3xl font-black text-black uppercase">
-            {project.title}
-          </h3>
-
-          <button onClick={onClose} className="text-zinc-400 hover:text-black transition-colors shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 6 6 18"/>
-              <path d="m6 6 12 12"/>
-            </svg>
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
-          <div>
-            <h4 className="text-xl font-bold text-black mb-5 uppercase tracking-tighter">Key Accomplishments</h4>
-
-            <ul className="space-y-4">
-              {project.details.map((detail, i) => (
-                <li key={i} className="text-zinc-600 font-medium leading-relaxed flex items-start gap-3 text-lg">
-                  <span className="text-blue-500 mt-2 text-[8px] shrink-0">●</span><span className="break-words">
-                    {detail}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="flex flex-col justify-between">
-            <div>
-              <h4 className="text-xl font-bold text-black mb-5 uppercase tracking-tighter">
-                Used Skills
-              </h4>
-
-              <div className="flex flex-wrap gap-2 mb-8">
-                {project.skills.map((skill) => (
-                  <span key={skill} className="px-4 py-2 bg-blue-50 text-blue-600 text-sm font-bold rounded-lg">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3">
-              {project.githubUrl && (
-                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" 
-                className="w-full py-4 bg-zinc-100 text-black text-center font-bold rounded-[5px] hover:bg-zinc-200 transition-colors flex items-center justify-center gap-3 border border-zinc-200">
-                  <Image src="/icons/github-mark.png" alt="GitHub" width={20} height={20} />
-                  GitHub
-                </a>
-              )}
-
-              {project.pdfUrl && project.pdfUrl !== "" && (
-                <a href={project.pdfUrl} target="_blank" rel="noopener noreferrer" 
-                className="w-full py-4 bg-black text-white text-center font-bold rounded-[5px] hover:bg-blue-600 transition-colors flex items-center justify-center gap-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                  </svg>
-                  PDF
-                  </a>
-                )}
-            </div>
-          </div>
-
-
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
-
-
-//상세 모달 컴포넌트 (Skill)
-function SkillModal({ category, details, onClose }: { category: string; details: any[]; onClose: () => void }) {
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-[2px] p-4" onClick={onClose}>
-      <div className="bg-white w-fit max-w-[95%] md:max-w-[85%] rounded-[5px] border-[2px] border-zinc-200 
-      p-8 md:p-16 shadow-sm max-h-[90vh] overflow-y-auto text-left" onClick={(e) => e.stopPropagation()}>
-        
-        <div className="flex justify-between items-center mb-10 md:mb-16 gap-10">
-          <h3 className="text-2xl md:text-3xl font-black text-black tracking-tighter uppercase">
-            {category} EXPERIENCE
-          </h3>
-
-          <button onClick={onClose} className="text-zinc-400 hover:text-black transition-colors shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 6 6 18"/>
-              <path d="m6 6 12 12"/>
-            </svg>
-          </button>
-        </div>
-
-        <div className={`grid grid-cols-1 ${details.length === 3 ? 'md:grid-cols-3' : details.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-x-12 gap-y-10`}>
-          {details.map((group, i) => (
-            <div key={i} className="flex flex-col min-w-0">
-              <h4 className="text-xl md:text-2xl font-black text-black mb-6 flex items-center gap-3">
-                <span className="w-1.5 h-7 bg-blue-500 rounded-full shrink-0"></span>
-                {group.subtitle}
-              </h4>
-
-              <ul className="space-y-5">
-                {group.contents.map((desc: string, j: number) => (
-                  <li key={j} className="text-[15px] md:text-[17px] font-medium text-zinc-600 leading-relaxed flex items-start gap-3">
-                    <span className="text-blue-500 mt-2.5 text-[10px] shrink-0">
-                      ●
-                    </span>
-                    <span className="break-words overflow-wrap-anywhere">
-                      {desc}
-                    </span>
-                  </li>
-                  ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-      </div>
-    </div>
-  );
-}
-
-
-
-//컴포넌트
-function QuickMenuIcon({ href, emoji, label }: { href: string; emoji: string; label: string }) {
-  return (
-    <a href={href} 
-    className="group flex flex-col items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-xl rounded-[5px] 
-    border border-white/30 hover:bg-white/40 transition-all duration-300 shadow-2xl">
-      <span className="text-3xl group-hover:scale-110 transition-transform">
-        {emoji}
-      </span>
-      <span className="text-[10px] mt-2 font-black text-white group-hover:text-blue-300 tracking-widest uppercase">
+    <a href={href} className="group relative flex items-center justify-end">
+      <span className="absolute right-8 text-white font-black tracking-widest text-sm opacity-0 -translate-x-2 
+      group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out pointer-events-none">
         {label}
       </span>
+      <div className={`w-3 h-3 bg-white rounded-full transition-all duration-300 group-hover:scale-150 ${hoverColor} shadow-lg`} />
     </a>
   );
 }
-
-
-
-function ProfileItem({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-start">
-      <span className="w-24 md:w-32 text-zinc-400 font-bold tracking-tighter shrink-0">
-        {label}
-      </span>
-      <span className="text-black font-semibold">
-        {value}
-      </span>
-    </div>
-  );
-}
-
-
 
 function SocialIcon({ href, icon, src }: { href: string; icon: string; src: string }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" 
-    className="w-12 h-12 flex items-center justify-center rounded-xl bg-zinc-100 border border-zinc-200 hover:bg-blue-500 
-    hover:scale-110 transition-all duration-300 overflow-hidden p-2.5 group">
-      <div className="relative w-full h-full">
-        <Image src={src} alt={icon} fill className="object-contain transition-all duration-300 group-hover:brightness-0 group-hover:invert" />
-      </div>
+    className="group relative w-4 h-4 flex items-center justify-center">
+      <div className="absolute w-3 h-3 bg-white rounded-full transition-all duration-300 group-hover:opacity-0 group-hover:scale-0" />
+      <motion.div 
+        className="absolute w-8 h-8 opacity-0 scale-50 transition-all duration-300 group-hover:opacity-100 group-hover:scale-125"
+        whileHover={{ rotate: 5 }}
+      >
+        <Image src={src} alt={icon} fill className="object-contain invert brightness-200" />
+      </motion.div>
     </a>
   );
 }
 
+function ProjectCard({ project, onClick }: { project: ProjectItem; onClick: () => void }) {
+  return (
+    <div onClick={onClick} 
+    className="group bg-zinc-700/50 backdrop-blur-md p-10 rounded-[5px] border-[2px] border-zinc-200 cursor-pointer transition-all 
+    duration-300 hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)] hover:border-blue-500/30 
+    flex flex-col justify-between h-full">
+      <div>
+        <span className="text-zinc-400 font-bold text-sm">{project.period}</span>
+        <h3 className="text-3xl font-black text-white mt-2 mb-4 group-hover:text-blue-500 transition-colors uppercase">{project.title}</h3>
+        <p className="text-zinc-100 font-medium mb-6 leading-relaxed">{project.description}</p>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {project.skills.map((skill: string) => (
+          <span key={skill} className="px-3 py-1 bg-zinc-800 text-zinc-300 text-xs font-bold rounded-full">
+            {skill}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
+function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/50 backdrop-blur-[2px] p-4" onClick={onClose}>
+      <div className="bg-zinc-800 w-fit max-w-[95%] md:max-w-[70%] rounded-[5px] border-[2px] border-zinc-200 p-8 md:p-16 shadow-sm overflow-y-auto max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+        <div className="flex justify-between items-center mb-10">
+          <h3 className="text-3xl font-black text-white uppercase">{project.title}</h3>
+          <button onClick={onClose} className="text-zinc-400 hover:text-white transition-colors shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
+          <div>
+            <h4 className="text-xl font-bold text-white mb-5 uppercase tracking-tighter">Key Accomplishments</h4>
+            <ul className="space-y-4">
+              {project.details.map((detail, i) => (
+                <li key={i} className="text-zinc-100 font-medium leading-relaxed flex items-start gap-3 text-lg"><span className="text-blue-500 mt-2 text-[8px] shrink-0">●</span><span className="break-words text-white">{detail}</span></li>
+              ))}
+            </ul>
+          </div>
+          <div className="flex flex-col justify-between">
+            <div>
+              <h4 className="text-xl font-bold text-white mb-5 uppercase tracking-tighter">Used Skills</h4>
+              <div className="flex flex-wrap gap-2 mb-8">{project.skills.map((skill) => (<span key={skill} className="px-4 py-2 bg-blue-900 text-blue-200 text-sm font-bold rounded-lg">{skill}</span>))}</div>
+            </div>
+            <div className="flex flex-col gap-3">
+              {project.githubUrl && (<a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="w-full py-4 bg-zinc-800 text-white text-center font-bold rounded-[5px] hover:bg-zinc-700 transition-colors flex items-center justify-center gap-3 border border-zinc-700"><Image src="/icons/github-mark.png" alt="GitHub" width={20} height={20} className="invert" />GitHub</a>)}
+              {project.pdfUrl && project.pdfUrl !== "" && (<a href={project.pdfUrl} target="_blank" rel="noopener noreferrer" className="w-full py-4 bg-blue-600 text-white text-center font-bold rounded-[5px] hover:bg-blue-700 transition-colors flex items-center justify-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>PDF</a>)}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SkillModal({ category, details, onClose }: { category: string; details: any[]; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-[2px] p-4" onClick={onClose}>
+      <div className="bg-zinc-800 w-fit max-w-[95%] md:max-w-[85%] rounded-[5px] border-[2px] border-zinc-200 p-8 md:p-16 shadow-sm max-h-[90vh] overflow-y-auto text-left" onClick={(e) => e.stopPropagation()}>
+        <div className="flex justify-between items-center mb-10 md:mb-16 gap-10">
+          <h3 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase">{category} EXPERIENCE</h3>
+          <button onClick={onClose} className="text-zinc-400 hover:text-white transition-colors shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+        </div>
+        <div className={`grid grid-cols-1 ${details.length === 3 ? 'md:grid-cols-3' : details.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-x-12 gap-y-10`}>
+          {details.map((group, i) => (
+            <div key={i} className="flex flex-col min-w-0">
+              <h4 className="text-xl md:text-2xl font-black text-white mb-6 flex items-center gap-3"><span className="w-1.5 h-7 bg-blue-500 rounded-full shrink-0"></span>{group.subtitle}</h4>
+              <ul className="space-y-5">{group.contents.map((desc: string, j: number) => (<li key={j} className="text-[15px] md:text-[17px] font-medium text-zinc-100 leading-relaxed flex items-start gap-3"><span className="text-blue-500 mt-2.5 text-[10px] shrink-0">●</span><span className="break-words overflow-wrap-anywhere text-zinc-300">{desc}</span></li>))}</ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function QuickMenuIcon({ href, emoji, label }: { href: string; emoji: string; label: string }) {
+  return (<a href={href} className="group flex flex-col items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-xl rounded-[5px] border border-white/30 hover:bg-white/40 transition-all duration-300 shadow-2xl"><span className="text-3xl group-hover:scale-110 transition-transform">{emoji}</span><span className="text-[10px] mt-2 font-black text-white group-hover:text-blue-300 tracking-widest uppercase">{label}</span></a>);
+}
+
+function ProfileItem({ label, value }: { label: string; value: string }) {
+  return (<div className="flex items-start"><span className="w-24 md:w-32 text-zinc-400 font-bold tracking-tighter shrink-0">{label}</span><span className="text-white font-semibold">{value}</span></div>);
+}
 
 function SkillCategory({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="group bg-white p-6 lg:p-8 rounded-[5px] border-[2px] border-zinc-100 transition-all duration-300 ease-out 
-    hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:border-blue-500/30">
-      <h3 className="text-xl lg:text-2xl font-black text-blue-500 mb-6 tracking-tighter border-b-2 border-zinc-50 pb-2 uppercase text-center">
-        {title}
-      </h3>
-      <div className="grid grid-cols-2 gap-4">
-        {children}
-      </div>
-    </div>
-  );
+  return (<div className="group bg-zinc-700/50 backdrop-blur-md p-6 lg:p-8 rounded-[5px] border-[2px] border-zinc-200 transition-all duration-300 ease-out hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)] hover:border-blue-500/30"><h3 className="text-xl lg:text-2xl font-black text-blue-500 mb-6 tracking-tighter border-b-2 border-zinc-700 pb-2 uppercase text-center">{title}</h3><div className="grid grid-cols-2 gap-4">{children}</div></div>);
 }
-
-
 
 function SkillItem({ name, src }: { name: string; src: string }) {
-  return (
-    <div className="flex flex-col items-center gap-2 p-1">
-      <div className="relative w-10 h-10 lg:w-12 lg:h-12 grayscale group-hover:grayscale-0 transition-all duration-500">
-        <Image src={src} alt={name} fill className="object-contain" />
-      </div>
-      <span className="text-[10px] lg:text-xs font-bold text-zinc-400 group-hover:text-black transition-colors duration-500 uppercase">
-        {name}
-      </span>
-    </div>
-  );
+  return (<div className="flex flex-col items-center gap-2 p-1"><div className="relative w-10 h-10 lg:w-12 lg:h-12 grayscale group-hover:grayscale-0 transition-all duration-500"><Image src={src} alt={name} fill className="object-contain" /></div><span className="text-[10px] lg:text-xs font-bold text-zinc-400 group-hover:text-white transition-colors duration-500 uppercase">{name}</span></div>);
 }
-
-
 
 function Footer() {
-  return (
-    <footer className="w-full py-15 bg-zinc-900 text-white flex flex-col items-center justify-center gap-6">
-      <div className="flex gap-8">
-        <a href="https://github.com/JangYongMin" target="_blank" rel="noopener noreferrer" 
-        className="hover:text-blue-500 transition-colors uppercase font-bold tracking-widest">
-          GitHub
-        </a>
-        <a href="mailto:yongmin0182@gmail.com" target="_blank" rel="noopener noreferrer" 
-        className="hover:text-blue-500 transition-colors uppercase font-bold tracking-widest">
-          Email
-        </a>
-        <a href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2" target="_blank" rel="noopener noreferrer" 
-        className="hover:text-blue-500 transition-colors uppercase font-bold tracking-widest">
-          LinkedIn
-        </a>
-      </div>
-      <p className="text-sm text-zinc-500 font-medium tracking-widest uppercase">
-        © 2025 Jang Yongmin. All rights reserved.
-      </p>
-    </footer>
-  );
+  return (<footer className="w-full py-15 bg-zinc-900/80 backdrop-blur-md text-white flex flex-col items-center justify-center gap-6"><div className="flex gap-8"><a href="https://github.com/JangYongMin" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors uppercase font-bold tracking-widest">GitHub</a><a href="mailto:yongmin0182@gmail.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors uppercase font-bold tracking-widest">Email</a><a href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors uppercase font-bold tracking-widest">LinkedIn</a></div><p className="text-sm text-zinc-500 font-medium tracking-widest uppercase">© 2025 Jang Yongmin. All rights reserved.</p></footer>);
 }
-
-
-
 
 function TopButton() {
   const scrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    
-    // 1. 전체 페이지 부모 스크롤 최상단 이동
     const mainContent = document.querySelector('main');
     if (mainContent) {
-      mainContent.scrollTo({ 
-        top: 0, 
-        behavior: 'smooth' 
-      });
+      mainContent.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
-    // 2. 프로젝트 묶음 섹션 내부 스크롤 최상단 초기화
     const projectContainer = document.getElementById('project-container');
     if (projectContainer) {
-      projectContainer.scrollTo({ 
-        top: 0 
-      }); // 내부 위치 리셋
+      projectContainer.scrollTo({ top: 0 });
     }
   };
 
   return (
-    <a href="#home" onClick={scrollToTop}
-      className="fixed bottom-10 right-10 z-50 flex flex-col items-center justify-center w-14 h-14 bg-white/90 backdrop-blur-md rounded-[5px] 
-      shadow-2xl border border-zinc-200 transition-all duration-300 hover:bg-blue-500 hover:scale-110 active:scale-95 group" 
-      aria-label="Scroll to top">
-      <span className="text-xl font-bold text-blue-500 group-hover:text-white group-hover:scale-125 transition-all duration-300">
-        ↑
-      </span>
-      <span className="text-[10px] font-black text-blue-500 group-hover:text-white transition-colors duration-300 uppercase">
-        Top
-      </span>
+    <a href="#home" onClick={scrollToTop} className="fixed bottom-10 right-10 z-50 group flex items-center justify-end" aria-label="Scroll to top">
+      <span className="absolute right-8 text-white font-black tracking-widest text-sm opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out pointer-events-none">TOP</span>
+      <div className="w-3 h-3 bg-white rounded-full transition-all duration-300 group-hover:scale-150 shadow-lg" />
     </a>
   );
 }
