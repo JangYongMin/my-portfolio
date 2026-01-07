@@ -174,7 +174,6 @@ export default function Home() {
     }
   ];
 
-  // 🔥 런타임 에러 수정을 위해 ease 값을 유효한 범위(0~1)로 조정
   const wordVariants: Variants = {
     hidden: { opacity: 0, y: 50 },
     visible: (i: number) => ({
@@ -183,9 +182,49 @@ export default function Home() {
       transition: {
         delay: i * 0.2,
         duration: 0.8,
-        ease: [0.25, 0.1, 0.25, 1] // 유효한 cubic-bezier 값으로 변경
+        ease: [0.25, 0.1, 0.25, 1] 
       }
     })
+  };
+
+  const socialContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2, 
+        delayChildren: 0.5    
+      }
+    }
+  };
+
+  const socialItemVariants: Variants = {
+    hidden: { x: 50, opacity: 0 }, 
+    visible: { 
+      x: 0, 
+      opacity: 1,
+      transition: { duration: 0.6, ease: "easeOut" } 
+    }
+  };
+
+  const infoContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1, 
+        delayChildren: 0.3    
+      }
+    }
+  };
+
+  const infoItemVariants: Variants = {
+    hidden: { y: 20, opacity: 0 }, 
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { duration: 0.5, ease: "easeOut" } 
+    }
   };
 
   return (
@@ -195,14 +234,19 @@ export default function Home() {
       <section id="home" className="h-screen w-full snap-start snap-always flex flex-col md:flex-row items-center justify-center 
       px-10 md:px-20 bg-transparent overflow-hidden">
         <div className="flex-1 text-center md:text-left drop-shadow-2xl md:pl-32">
-          <div className="text-6xl md:text-[10rem] font-black tracking-tighter text-white leading-[0.85] uppercase">
-            <motion.div custom={0} initial="hidden" animate="visible" variants={wordVariants} className="text-pink-600 inline-block">CREATE</motion.div>
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.5 }}
+            className="text-6xl md:text-[10rem] font-black tracking-tighter text-white leading-[0.85] uppercase"
+          >
+            <motion.div custom={0} variants={wordVariants} className="text-pink-600 inline-block">CREATE</motion.div>
             <br />
-            <motion.div custom={1} initial="hidden" animate="visible" variants={wordVariants} className="inline-block">MY</motion.div>{" "}
-            <motion.div custom={2} initial="hidden" animate="visible" variants={wordVariants} className="text-blue-500 inline-block">OWN</motion.div>
+            <motion.div custom={1} variants={wordVariants} className="inline-block">MY</motion.div>{" "}
+            <motion.div custom={2} variants={wordVariants} className="text-blue-500 inline-block">OWN</motion.div>
             <br />
-            <motion.div custom={3} initial="hidden" animate="visible" variants={wordVariants} className="text-orange-600 inline-block">LIFE</motion.div>
-          </div>
+            <motion.div custom={3} variants={wordVariants} className="text-orange-600 inline-block">LIFE</motion.div>
+          </motion.div>
           <p className="mt-8 text-lg md:text-xl text-white/90 font-medium max-w-lg">나만의 가치를 만드는 개발자, 장용민입니다.</p>
         </div>
         
@@ -220,30 +264,51 @@ export default function Home() {
       <section id="profile" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-transparent z-10 overflow-hidden">
         <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
           <div className="flex items-center gap-6">
-            <div className="flex flex-col gap-8 shrink-0 pr-4">
-              <SocialIcon href="https://github.com/JangYongMin" icon="github" src="/icons/github-mark.png" />
-              <SocialIcon href="https://discord.gg/SPamqcaV4d" icon="discord" src="/icons/Discord-Symbol-Black.png" />
-              <SocialIcon href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2/" icon="linkedin" src="/icons/InBug-Black.png" />
-            </div>
-            <div className="relative w-64 md:w-80 lg:w-96 aspect-square bg-zinc-200 rounded-[5px] shadow-xl overflow-hidden shrink-0">
+            <motion.div 
+              className="flex flex-col gap-8 shrink-0 pr-4 z-0"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: false, amount: 0.5 }}
+              variants={socialContainerVariants}
+            >
+              <motion.div variants={socialItemVariants}>
+                <SocialIcon href="https://github.com/JangYongMin" icon="github" src="/icons/github-mark.png" />
+              </motion.div>
+              <motion.div variants={socialItemVariants}>
+                <SocialIcon href="https://discord.gg/SPamqcaV4d" icon="discord" src="/icons/Discord-Symbol-Black.png" />
+              </motion.div>
+              <motion.div variants={socialItemVariants}>
+                <SocialIcon href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2/" icon="linkedin" src="/icons/InBug-Black.png" />
+              </motion.div>
+            </motion.div>
+
+            <div className="relative w-64 md:w-80 lg:w-96 aspect-square bg-zinc-200 rounded-[5px] shadow-xl overflow-hidden shrink-0 z-10">
               <Image src="https://firebasestorage.googleapis.com/v0/b/portfolio-83772.firebasestorage.app/o/profile.jpg?alt=media&token=401a5e0d-4ad0-443e-b822-cca6b9bf85b8" 
               alt="Jang Yongmin" fill className="object-cover" priority />
             </div>
           </div>
-          <div className="flex flex-col gap-6 text-left shrink-0">
-            <div className="relative inline-flex mb-4">
+
+          <motion.div 
+            className="flex flex-col gap-6 text-left shrink-0"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.5 }}
+            variants={infoContainerVariants}
+          >
+            <motion.div variants={infoItemVariants} className="relative inline-flex mb-4">
               <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight uppercase relative z-10">Profile</h2>
               <div className="absolute -bottom-[3px] left-0 w-55 h-3 md:h-4 bg-pink-600 -rotate-1"></div>
-            </div>
+            </motion.div>
+
             <div className="space-y-4 text-lg md:text-xl font-medium text-zinc-100">
-              <ProfileItem label="이름" value="장용민" />
-              <ProfileItem label="생년월일" value="01.08.02" />
-              <ProfileItem label="위치" value="서울특별시 영등포구" />
-              <ProfileItem label="연락처" value="010-3234-3971" />
-              <ProfileItem label="이메일" value="yongmin0182@gmail.com" />
-              <ProfileItem label="학력" value="중원대학교 컴퓨터공학 학사" />
+              <motion.div variants={infoItemVariants}><ProfileItem label="이름" value="장용민" /></motion.div>
+              <motion.div variants={infoItemVariants}><ProfileItem label="생년월일" value="01.08.02" /></motion.div>
+              <motion.div variants={infoItemVariants}><ProfileItem label="위치" value="서울특별시 영등포구" /></motion.div>
+              <motion.div variants={infoItemVariants}><ProfileItem label="연락처" value="010-3234-3971" /></motion.div>
+              <motion.div variants={infoItemVariants}><ProfileItem label="이메일" value="yongmin0182@gmail.com" /></motion.div>
+              <motion.div variants={infoItemVariants}><ProfileItem label="학력" value="중원대학교 컴퓨터공학 학사" /></motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -444,7 +509,16 @@ function SkillItem({ name, src }: { name: string; src: string }) {
 }
 
 function Footer() {
-  return (<footer className="w-full py-15 bg-zinc-900/80 backdrop-blur-md text-white flex flex-col items-center justify-center gap-6"><div className="flex gap-8"><a href="https://github.com/JangYongMin" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors uppercase font-bold tracking-widest">GitHub</a><a href="mailto:yongmin0182@gmail.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors uppercase font-bold tracking-widest">Email</a><a href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors uppercase font-bold tracking-widest">LinkedIn</a></div><p className="text-sm text-zinc-500 font-medium tracking-widest uppercase">© 2025 Jang Yongmin. All rights reserved.</p></footer>);
+  return (
+    <footer className="w-full py-15 bg-zinc-900/80 backdrop-blur-md text-white flex flex-col items-center justify-center gap-6">
+      <div className="flex gap-8">
+        <a href="https://github.com/JangYongMin" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors uppercase font-bold tracking-widest">GitHub</a>
+        <a href="mailto:yongmin0182@gmail.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors uppercase font-bold tracking-widest">Email</a>
+        <a href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors uppercase font-bold tracking-widest">LinkedIn</a>
+      </div>
+      <p className="text-sm text-zinc-500 font-medium tracking-widest uppercase">© 2025 Jang Yongmin. All rights reserved.</p>
+    </footer>
+  );
 }
 
 function TopButton() {
