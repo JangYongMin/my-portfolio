@@ -103,9 +103,12 @@ export default function Home() {
   return (
     <main 
       ref={containerRef} 
-      className="h-screen overflow-y-auto snap-y snap-mandatory no-scrollbar relative bg-gradient-to-b from-zinc-800 via-zinc-900 to-black text-zinc-200"
-      style={{ scrollBehavior: 'auto', WebkitOverflowScrolling: 'touch' }}
-    > 
+      className="h-screen overflow-y-auto snap-y snap-mandatory no-scrollbar relative bg-gradient-to-b from-zinc-800 via-zinc-900 to-black text-zinc-200 scroll-smooth"
+      style={{ 
+        scrollBehavior: 'smooth', 
+        WebkitOverflowScrolling: 'touch' 
+      }}
+    >
       {/* 사이드 도트 네비게이션: absolute + springY 추적 */}
       <motion.div 
         style={{ 
@@ -120,32 +123,32 @@ export default function Home() {
         <QuickDotMenu href="#project-container" label="PROJECTS" hoverColor="group-hover:bg-orange-600" />
       </motion.div>
 
-{/* Home Section */}
-<section id="home" className="h-screen w-full snap-start snap-always flex flex-col lg:flex-row items-center justify-center px-10 md:px-20 bg-transparent overflow-hidden">
-  {/* items-center(모바일 중앙) -> lg:items-start(데스크톱 왼쪽 밀착) */}
-  <div className="flex-1 flex flex-col justify-center items-center lg:items-start text-center lg:text-left drop-shadow-2xl lg:pl-32">
-    
-    <motion.div initial="hidden" whileInView="visible" className="text-6xl md:text-[10rem] font-black tracking-tighter text-zinc-200 leading-[0.85] uppercase">
-      <motion.div custom={0} variants={wordVariants} className="text-pink-600 inline-block">CREATE</motion.div><br />
-      <motion.div custom={1} variants={wordVariants} className="inline-block">MY</motion.div> 
-      <motion.div custom={2} variants={wordVariants} className="text-blue-500 inline-block">OWN</motion.div><br />
-      <motion.div custom={3} variants={wordVariants} className="text-orange-600 inline-block">LIFE</motion.div>
-    </motion.div>
+      {/* Home Section */}
+      <section id="home" className="h-screen w-full snap-start snap-always flex flex-col lg:flex-row items-center justify-center px-10 md:px-20 bg-transparent overflow-hidden">
+        {/* items-center(모바일 중앙) -> lg:items-start(데스크톱 왼쪽 밀착) */}
+        <div className="flex-1 flex flex-col justify-center items-center lg:items-start text-center lg:text-left drop-shadow-2xl lg:pl-32">
+          
+          <motion.div initial="hidden" whileInView="visible" className="text-6xl md:text-[10rem] font-black tracking-tighter text-zinc-200 leading-[0.85] uppercase">
+            <motion.div custom={0} variants={wordVariants} className="text-pink-600 inline-block">CREATE</motion.div><br />
+            <motion.div custom={1} variants={wordVariants} className="inline-block">MY</motion.div> 
+            <motion.div custom={2} variants={wordVariants} className="text-blue-500 inline-block">OWN</motion.div><br />
+            <motion.div custom={3} variants={wordVariants} className="text-orange-600 inline-block">LIFE</motion.div>
+          </motion.div>
 
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
-      viewport={{ once: false }}
-      /* mx-auto lg:mx-0: 중앙 정렬 해제
-         lg:ml-2: 타이틀 글꼴 두께에 따른 시각적 왼쪽 여백 보정 
-      */
-      className="mt-8 text-lg md:text-xl text-zinc-200/90 font-medium max-w-lg mx-auto lg:mx-0 lg:ml-2"
-    >
-      나만의 가치를 만드는 개발자 <br />장용민입니다.
-    </motion.div>
-  </div>
-</section>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: false }}
+            /* mx-auto lg:mx-0: 중앙 정렬 해제
+              lg:ml-2: 타이틀 글꼴 두께에 따른 시각적 왼쪽 여백 보정 
+            */
+            className="mt-8 text-lg md:text-xl text-zinc-200/90 font-medium max-w-lg mx-auto lg:mx-0 lg:ml-2"
+          >
+            나만의 가치를 만드는 개발자 <br />장용민입니다.
+          </motion.div>
+        </div>
+      </section>
 
       {/* Profile Section */}
       <section id="profile" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-transparent z-10 overflow-hidden">
