@@ -120,26 +120,32 @@ export default function Home() {
         <QuickDotMenu href="#project-container" label="PROJECTS" hoverColor="group-hover:bg-orange-600" />
       </motion.div>
 
-      {/* Home Section */}
-      <section id="home" className="h-screen w-full snap-start snap-always flex flex-col lg:flex-row items-center justify-center px-10 md:px-20 bg-transparent overflow-hidden">
-        <div className="flex-1 text-center lg:text-left drop-shadow-2xl lg:pl-32 flex flex-col justify-center">
-          <motion.div initial="hidden" whileInView="visible" className="text-6xl md:text-[10rem] font-black tracking-tighter text-zinc-200 leading-[0.85] uppercase">
-            <motion.div custom={0} variants={wordVariants} className="text-pink-600 inline-block">CREATE</motion.div><br />
-            <motion.div custom={1} variants={wordVariants} className="inline-block">MY</motion.div> 
-            <motion.div custom={2} variants={wordVariants} className="text-blue-500 inline-block">OWN</motion.div><br />
-            <motion.div custom={3} variants={wordVariants} className="text-orange-600 inline-block">LIFE</motion.div>
-          </motion.div>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
-            viewport={{ once: false }}
-            className="mt-8 text-lg md:text-xl text-zinc-200/90 font-medium max-w-lg"
-          >
-            나만의 가치를 만드는 개발자, 장용민입니다.
-          </motion.p>
-        </div>
-      </section>
+{/* Home Section */}
+<section id="home" className="h-screen w-full snap-start snap-always flex flex-col lg:flex-row items-center justify-center px-10 md:px-20 bg-transparent overflow-hidden">
+  {/* items-center(모바일 중앙) -> lg:items-start(데스크톱 왼쪽 밀착) */}
+  <div className="flex-1 flex flex-col justify-center items-center lg:items-start text-center lg:text-left drop-shadow-2xl lg:pl-32">
+    
+    <motion.div initial="hidden" whileInView="visible" className="text-6xl md:text-[10rem] font-black tracking-tighter text-zinc-200 leading-[0.85] uppercase">
+      <motion.div custom={0} variants={wordVariants} className="text-pink-600 inline-block">CREATE</motion.div><br />
+      <motion.div custom={1} variants={wordVariants} className="inline-block">MY</motion.div> 
+      <motion.div custom={2} variants={wordVariants} className="text-blue-500 inline-block">OWN</motion.div><br />
+      <motion.div custom={3} variants={wordVariants} className="text-orange-600 inline-block">LIFE</motion.div>
+    </motion.div>
+
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
+      viewport={{ once: false }}
+      /* mx-auto lg:mx-0: 중앙 정렬 해제
+         lg:ml-2: 타이틀 글꼴 두께에 따른 시각적 왼쪽 여백 보정 
+      */
+      className="mt-8 text-lg md:text-xl text-zinc-200/90 font-medium max-w-lg mx-auto lg:mx-0 lg:ml-2"
+    >
+      나만의 가치를 만드는 개발자 <br />장용민입니다.
+    </motion.div>
+  </div>
+</section>
 
       {/* Profile Section */}
       <section id="profile" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-transparent z-10 overflow-hidden">
@@ -154,10 +160,10 @@ export default function Home() {
               <Image src="https://firebasestorage.googleapis.com/v0/b/portfolio-83772.firebasestorage.app/o/profile.jpg?alt=media&token=401a5e0d-4ad0-443e-b822-cca6b9bf85b8" alt="Jang Yongmin" fill className="object-cover" priority />
             </motion.div>
           </div>
-          <motion.div className="flex flex-col gap-6 text-left shrink-0" initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }} variants={infoContainerVariants}>
+          <motion.div className="flex flex-col items-start gap-6 text-left shrink-0" initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }} variants={infoContainerVariants}>
             <motion.div variants={infoItemVariants} className="relative inline-flex mb-4">
               <h2 className="text-4xl md:text-5xl font-black text-zinc-200 tracking-tight uppercase relative z-10">Profile</h2>
-              <div className="absolute -bottom-[3px] left-0 w-55 h-3 md:h-4 bg-pink-600 -rotate-1"></div>
+              <div className="absolute -bottom-[3px] left-0 w-full h-3 md:h-4 bg-pink-600 -rotate-1"></div>
             </motion.div>
             <div className="space-y-4 text-lg md:text-xl font-medium text-zinc-100">
               <motion.div variants={infoItemVariants}><ProfileItem label="이름" value="장용민" /></motion.div>
