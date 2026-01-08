@@ -1,0 +1,11 @@
+discord-symbol-white.svg
+docker-mark-blue.svg
+github-mark.svg
+InBug-White.png
+java-logo.png
+javascript-logo.svg
+logo-bird-ninja.svg
+nextjs-logo.png
+oracle-logo.svg
+python-logo-only.svg
+spring-boot.png

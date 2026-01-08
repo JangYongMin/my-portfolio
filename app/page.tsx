@@ -287,7 +287,7 @@ export default function Home() {
   return (
     <main ref={containerRef} className="h-screen overflow-y-auto snap-y snap-mandatory no-scrollbar scroll-smooth relative will-change-scroll bg-gradient-to-b from-zinc-800 via-zinc-900 to-black text-white">
       
-      {/* 히어로 섹션: 메인 타이틀과 슬로건 표시 */}
+      {/* Home Section: 메인 타이틀과 슬로건 표시 */}
       <section id="home" className="h-screen w-full snap-start snap-always flex flex-col md:flex-row items-center justify-center 
       px-10 md:px-20 bg-transparent overflow-hidden">
         <div className="flex-1 text-center md:text-left drop-shadow-2xl md:pl-32">
@@ -327,7 +327,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* 프로필 섹션: 사진, 소셜 링크, 인적 사항 표시 */}
+      {/* Profile Section: 사진, 소셜 링크, 인적 사항 표시 */}
       <section id="profile" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-transparent z-10 overflow-hidden">
         <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
           <div className="flex items-center gap-6">
@@ -342,7 +342,7 @@ export default function Home() {
                 <SocialIcon href="https://github.com/JangYongMin" icon="github" src="/icons/github-mark.svg" />
               </motion.div>
               <motion.div variants={socialItemVariants}>
-                <SocialIcon href="https://discord.gg/SPamqcaV4d" icon="discord" src="/icons/Discord-Symbol-White.svg" />
+                <SocialIcon href="https://discord.gg/SPamqcaV4d" icon="discord" src="/icons/discord-symbol-white.svg" />
               </motion.div>
               <motion.div variants={socialItemVariants}>
                 <SocialIcon href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2/" icon="linkedin" src="/icons/InBug-White.png" />
@@ -385,11 +385,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 스킬 섹션: 주요 기술 스택 카테고리별 카드 표시 */}
-      <section id="skills" className="relative h-screen w-full snap-start snap-always flex items-center justify-center bg-transparent z-10 px-10 md:px-20 overflow-hidden">
+      {/* SKILLS SECTION: 모바일 스냅 위치 수정을 위해 justify-start 적용 */}
+      <section 
+        id="skills" 
+        className="relative min-h-screen md:h-screen w-full snap-start snap-always flex flex-col items-center justify-start md:justify-center bg-transparent z-10 px-10 md:px-20 py-20 md:py-0 overflow-visible"
+      >
         <div className="max-w-6xl w-full flex flex-col items-center">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-10 md:mb-16"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, amount: 0.5 }}
@@ -404,16 +407,16 @@ export default function Home() {
           </motion.div>
 
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-14 lg:gap-18 cursor-pointer w-full"
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-14 lg:gap-18 cursor-pointer w-full"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
+            viewport={{ once: false, amount: 0.1 }}
             variants={skillContainerVariants}
           >
             <motion.div variants={skillCardVariants} onClick={() => setSelectedCategory("LANGUAGES")}>
               <SkillCategory title="LANGUAGES">
                 <SkillItem name="Java" src="/icons/java-logo.png" />
-                <SkillItem name="JavaScript" src="/icons/JavaScript-logo.svg" />
+                <SkillItem name="JavaScript" src="/icons/javascript-logo.svg" />
                 <SkillItem name="Python" src="/icons/python-logo-only.svg" />
               </SkillCategory>
             </motion.div>
@@ -426,7 +429,7 @@ export default function Home() {
             </motion.div>
             <motion.div variants={skillCardVariants} onClick={() => setSelectedCategory("DB & TOOLS")}>
               <SkillCategory title="DB & TOOLS">
-                <SkillItem name="Oracle" src="/icons/Oracle-logo.svg" />
+                <SkillItem name="Oracle" src="/icons/oracle-logo.svg" />
                 <SkillItem name="Docker" src="/icons/docker-mark-blue.svg" />
                 <SkillItem name="GitHub" src="/icons/github-mark.svg" />
               </SkillCategory>
@@ -435,7 +438,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 프로젝트 섹션: 수행한 프로젝트 목록 및 상세 정보 제공 */}
+      {/* Projects Section: 수행한 프로젝트 목록 및 상세 정보 제공 */}
       <section id="project-container" className="h-screen w-full snap-start snap-always overflow-y-auto no-scrollbar bg-transparent z-20 overflow-hidden">
         <div className="flex flex-col min-h-full">
           <div id="projects" className="min-h-screen w-full flex flex-col items-center px-10 py-32 shrink-0">
@@ -653,7 +656,7 @@ function ProjectModal({
                              rounded-[5px] hover:bg-zinc-700 transition-colors 
                              flex items-center justify-center gap-3 border border-zinc-700"
                 >
-                  <Image src="/icons/github-mark.svg" alt="GitHub" width={20} height={20} className="invert" />
+                  <Image src="/icons/github-mark.svg" alt="GitHub" width={20} height={20}/>
                   GitHub
                 </a>
               )}
