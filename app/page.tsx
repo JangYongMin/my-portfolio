@@ -339,10 +339,10 @@ export default function Home() {
               variants={socialContainerVariants}
             >
               <motion.div variants={socialItemVariants}>
-                <SocialIcon href="https://github.com/JangYongMin" icon="github" src="/icons/github-mark.png" />
+                <SocialIcon href="https://github.com/JangYongMin" icon="github" src="/icons/github-mark.svg" />
               </motion.div>
               <motion.div variants={socialItemVariants}>
-                <SocialIcon href="https://discord.gg/SPamqcaV4d" icon="discord" src="/icons/Discord-Symbol-White.png" />
+                <SocialIcon href="https://discord.gg/SPamqcaV4d" icon="discord" src="/icons/Discord-Symbol-White.svg" />
               </motion.div>
               <motion.div variants={socialItemVariants}>
                 <SocialIcon href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2/" icon="linkedin" src="/icons/InBug-White.png" />
@@ -413,22 +413,22 @@ export default function Home() {
             <motion.div variants={skillCardVariants} onClick={() => setSelectedCategory("LANGUAGES")}>
               <SkillCategory title="LANGUAGES">
                 <SkillItem name="Java" src="/icons/java-logo.png" />
-                <SkillItem name="JavaScript" src="/icons/javaScript-logo.png" />
-                <SkillItem name="Python" src="/icons/python-logo-only.png" />
+                <SkillItem name="JavaScript" src="/icons/JavaScript-logo.svg" />
+                <SkillItem name="Python" src="/icons/python-logo-only.svg" />
               </SkillCategory>
             </motion.div>
             <motion.div variants={skillCardVariants} onClick={() => setSelectedCategory("FRAMEWORKS")}>
               <SkillCategory title="FRAMEWORKS">
                 <SkillItem name="Spring Boot" src="/icons/spring-boot.png" />
                 <SkillItem name="Next.js" src="/icons/nextjs-logo.png" />
-                <SkillItem name="MyBatis" src="/icons/logo-bird-ninja.png" />
+                <SkillItem name="MyBatis" src="/icons/logo-bird-ninja.svg" />
               </SkillCategory>
             </motion.div>
             <motion.div variants={skillCardVariants} onClick={() => setSelectedCategory("DB & TOOLS")}>
               <SkillCategory title="DB & TOOLS">
-                <SkillItem name="Oracle" src="/icons/oracleDB-logo.png" />
-                <SkillItem name="Docker" src="/icons/docker-mark-blue.png" />
-                <SkillItem name="GitHub" src="/icons/github-mark.png" />
+                <SkillItem name="Oracle" src="/icons/Oracle-logo.svg" />
+                <SkillItem name="Docker" src="/icons/docker-mark-blue.svg" />
+                <SkillItem name="GitHub" src="/icons/github-mark.svg" />
               </SkillCategory>
             </motion.div>
           </motion.div>
@@ -653,7 +653,7 @@ function ProjectModal({
                              rounded-[5px] hover:bg-zinc-700 transition-colors 
                              flex items-center justify-center gap-3 border border-zinc-700"
                 >
-                  <Image src="/icons/github-mark.png" alt="GitHub" width={20} height={20} className="invert" />
+                  <Image src="/icons/github-mark.svg" alt="GitHub" width={20} height={20} className="invert" />
                   GitHub
                 </a>
               )}
