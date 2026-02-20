@@ -160,7 +160,7 @@ export default function Home() {
               <motion.div variants={socialItemVariants}><SocialIcon href="https://www.linkedin.com/in/%EC%9A%A9%EB%AF%BC-%EC%9E%A5-a5b1553a2/" icon="linkedin" src="/icons/InBug-White.png" /></motion.div>
             </motion.div>
             <motion.div className="relative w-64 md:w-80 lg:w-96 aspect-square bg-zinc-200 rounded-[5px] shadow-xl overflow-hidden shrink-0 z-10" initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }} variants={profileImageVariants}>
-              <Image src="https://firebasestorage.googleapis.com/v0/b/portfolio-83772.firebasestorage.app/o/profile.jpg?alt=media&token=401a5e0d-4ad0-443e-b822-cca6b9bf85b8" alt="Jang Yongmin" fill className="object-cover" priority />
+              <Image src="https://firebasestorage.googleapis.com/v0/b/portfolio-83772.firebasestorage.app/o/profile2.png?alt=media&token=f8903f84-cdea-4063-ae12-309ce3fdc72b" alt="Jang Yongmin" fill className="object-cover" priority />
             </motion.div>
           </div>
           <motion.div className="flex flex-col items-start gap-6 text-left shrink-0" initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }} variants={infoContainerVariants}>
